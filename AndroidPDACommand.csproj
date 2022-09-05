@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Info.cs" />
+    <Compile Include="Broadcast_Mode_ContinuousScanStop.cs" />
+    <Compile Include="Broadcast_Mode_ContinuousScanStart.cs" />
     <Compile Include="Broadcast_Mode_Scan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

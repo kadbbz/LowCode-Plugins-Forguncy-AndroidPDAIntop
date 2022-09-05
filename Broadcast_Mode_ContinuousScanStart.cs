@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Scan.png")]
-    public class Broadcast_Mode_Scan : Command, IPropertySearchable, IForceGenerateCell
+    public class Broadcast_Mode_ContinuousScanStart : Command, IPropertySearchable, IForceGenerateCell
     {
         [FormulaProperty(true)]
         [DisplayName("目标单元格")]
@@ -19,7 +19,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "单次扫码到单元格";
+            return "开始持续扫码到单元格";
         }
 
         public override CommandScope GetCommandScope()
