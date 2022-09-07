@@ -17,6 +17,10 @@ namespace AndroidPDACommand
         [DisplayName("目标单元格")]
         public object TargetCell { get; set; }
 
+        [FormulaProperty(true)]
+        [DisplayName("是否为模态（弹出应用内置的扫码等待页面）")]
+        public object IsModalMode { get; set; }
+
         public override string ToString()
         {
             return "单次扫码到单元格";
@@ -24,7 +28,7 @@ namespace AndroidPDACommand
 
         public override CommandScope GetCommandScope()
         {
-            return CommandScope.Cell;
+            return CommandScope.All;
         }
 
         public IEnumerable<FindResultItem> EnumSearchableProperty(LocationIndicator location)

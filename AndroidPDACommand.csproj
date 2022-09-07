@@ -101,6 +101,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"E:\CODE\活字格插件打包工具\PluginPackageTool.exe" "$(ProjectDir)\" "$(ConfigurationName)"</PostBuildEvent>
+    <PostBuildEvent>"D:\CODE\PluginTools\PluginPackageTool\bin\Release\PluginPackageTool.exe" "$(ProjectDir)\" "$(ConfigurationName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

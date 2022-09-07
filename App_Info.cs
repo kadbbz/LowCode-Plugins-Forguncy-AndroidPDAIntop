@@ -28,7 +28,7 @@ namespace AndroidPDACommand
 
         public override CommandScope GetCommandScope()
         {
-            return CommandScope.Cell;
+            return CommandScope.All;
         }
 
         public IEnumerable<FindResultItem> EnumSearchableProperty(LocationIndicator location)

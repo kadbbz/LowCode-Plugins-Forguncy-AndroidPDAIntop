@@ -13,7 +13,12 @@
         var cellInfo = JSON.stringify(cellLocation);
 
         if (window.pda) {
-            window.pda.scan(cellInfo);
+            if (parm.IsModalMode || parm.IsModalMode ===0 ) {
+                window.pda.modal_scan(cellInfo); // 模态扫描
+            } else {
+                window.pda.continuous_scan(cellInfo,1); // 持续扫描，但仅接收1次
+            }
+
         } else {
             alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://github.com/kadbbz/huozige_morden_android_lowcode_app ");
         }
@@ -80,7 +85,7 @@ var Android_PDA_CScan_Start_Command = (function (_super) {
         var cellInfo = JSON.stringify(cellLocation);
 
         if (window.pda) {
-            window.pda.cscan_start(cellInfo);
+            window.pda.continuous_scan(cellInfo);
         } else {
             alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://github.com/kadbbz/huozige_morden_android_lowcode_app ");
         }
@@ -104,7 +109,7 @@ var Android_PDA_CScan_Stop_Command = (function (_super) {
 
 
         if (window.pda) {
-            window.pda.cscan_stop();
+            window.pda.continuous_scan_stop();
         } else {
             alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://github.com/kadbbz/huozige_morden_android_lowcode_app ");
         }
