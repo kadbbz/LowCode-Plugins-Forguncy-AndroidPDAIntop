@@ -1,0 +1,51 @@
+﻿using GrapeCity.Forguncy.Commands;
+using GrapeCity.Forguncy.Plugin;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace AndroidPDACommand
+{
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
+    public class Set_ActionBar_Color : Command, IPropertySearchable, IForceGenerateCell
+    {
+        [FormulaProperty(true)]
+        [DisplayName("颜色（格式为FF123456，透明度+R+G+B）")]
+        public object ColorString { get; set; }
+
+        public override string ToString()
+        {
+            return "设置标题栏的颜色";
+        }
+
+        public override CommandScope GetCommandScope()
+        {
+            return CommandScope.All;
+        }
+
+        public IEnumerable<FindResultItem> EnumSearchableProperty(LocationIndicator location)
+        {
+            yield return new FindResultItem()
+            {
+                Location = location.AppendProperty("颜色"),
+                Value = ColorString?.ToString()
+            };
+        }
+
+        public IEnumerable<GenerateCellInfo> GetForceGenerateCells()
+        {
+            if (ColorString is IFormulaReferObject formulaReferObject)
+            {
+                var colorString = formulaReferObject.GetGenerateCellInfo();
+                if (colorString != null)
+                {
+                    yield return colorString;
+                }
+            }
+        }
+    }
+}

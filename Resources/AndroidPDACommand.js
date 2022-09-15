@@ -23,7 +23,7 @@
             }
 
         } else {
-            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://github.com/kadbbz/huozige_morden_android_lowcode_app ");
+            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ");
         }
 
     };
@@ -60,7 +60,7 @@ var Android_PDA_App_Info_Command = (function (_super) {
             console.log("从APP获取包名和版本信息");
 
         } else {
-            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://github.com/kadbbz/huozige_morden_android_lowcode_app ");
+            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址：https://gitee.com/GrapeCity/huozige-hac-app ");
         }
 
     };
@@ -89,7 +89,7 @@ var Android_PDA_CScan_Start_Command = (function (_super) {
             window.pda.continuous_scan(cellInfo, 0);
             console.log("启动持续扫描");
         } else {
-            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://github.com/kadbbz/huozige_morden_android_lowcode_app ");
+            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ");
         }
 
     };
@@ -114,7 +114,7 @@ var Android_PDA_CScan_Stop_Command = (function (_super) {
             window.pda.continuous_scan_stop();
             console.log("停止持续扫描");
         } else {
-            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://github.com/kadbbz/huozige_morden_android_lowcode_app ");
+            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ");
         }
 
     };
@@ -124,3 +124,63 @@ var Android_PDA_CScan_Stop_Command = (function (_super) {
 
 // Key format is "Namespace.ClassName, AssemblyName"
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Broadcast_Mode_ContinuousScanStop, AndroidPDACommand", Android_PDA_CScan_Stop_Command);
+
+
+var Set_ActionBar_Color_Command = (function (_super) {
+    __extends(Set_ActionBar_Color_Command, _super);
+    function Set_ActionBar_Color_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Set_ActionBar_Color_Command.prototype.execute = function () {
+
+        // Get setings
+        var param = this.CommandParam;
+        var colorS = this.evaluateFormula(param.ColorString);
+
+        if (window.app) {
+            window.app.setActionBarColor(colorS);
+            console.log("标题栏颜色设置完成：" + colorS);
+        } else {
+            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ");
+        }
+
+    };
+
+    return Set_ActionBar_Color_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_ActionBar_Color, AndroidPDACommand", Set_ActionBar_Color_Command);
+
+
+var Get_ActionBar_Color_Command = (function (_super) {
+    __extends(Get_ActionBar_Color_Command, _super);
+    function Get_ActionBar_Color_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Get_ActionBar_Color_Command.prototype.execute = function () {
+
+        //// Get setings
+        var param = this.CommandParam;
+        var targetCellFormulaV = param.TargetCell;
+        var cellLocationV = this.getCellLocation(targetCellFormulaV);
+        var cellInfoV = JSON.stringify(cellLocationV);
+
+        if (window.app) {
+            window.app.getActionBarColor(cellInfoV);
+
+            console.log("从App获取状态栏颜色");
+
+        } else {
+            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ");
+        }
+
+    };
+
+    return Get_ActionBar_Color_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_ActionBar_Color, AndroidPDACommand", Get_ActionBar_Color_Command);
