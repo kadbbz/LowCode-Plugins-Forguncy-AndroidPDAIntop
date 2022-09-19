@@ -102,6 +102,10 @@
   <ItemGroup>
     <Resource Include="Resources\Icon_Info.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icon_Color.png" />
+    <Resource Include="Resources\Icon_Location.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"D:\CODE\PluginTools\PluginPackageTool\bin\Release\PluginPackageTool.exe" "$(ProjectDir)\" "$(ConfigurationName)"</PostBuildEvent>
