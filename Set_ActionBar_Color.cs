@@ -14,7 +14,7 @@ namespace AndroidPDACommand
     public class Set_ActionBar_Color : Command, IPropertySearchable, IForceGenerateCell
     {
         [FormulaProperty(true)]
-        [DisplayName("颜色（格式为FF123456，透明度+R+G+B）")]
+        [DisplayName("颜色（格式为FFFFFF，RGB）")]
         public object ColorString { get; set; }
 
         public override string ToString()
