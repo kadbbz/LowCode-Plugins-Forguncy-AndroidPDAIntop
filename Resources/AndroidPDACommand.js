@@ -1,4 +1,7 @@
-﻿var Android_PDA_Broadcast_Mode_Scan_Command = (function (_super) {
+﻿
+var ERROR_NOT_RUN_IN_HAC = "当前APP不支持该命令，这通常是因为APP版本过低。您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ";
+
+var Android_PDA_Broadcast_Mode_Scan_Command = (function (_super) {
     __extends(Android_PDA_Broadcast_Mode_Scan_Command, _super);
     function Android_PDA_Broadcast_Mode_Scan_Command() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -23,7 +26,7 @@
             }
 
         } else {
-            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ");
+            alert(ERROR_NOT_RUN_IN_HAC);
         }
 
     };
@@ -60,7 +63,7 @@ var Android_PDA_App_Info_Command = (function (_super) {
             console.log("从APP获取包名和版本信息");
 
         } else {
-            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址：https://gitee.com/GrapeCity/huozige-hac-app ");
+            alert(ERROR_NOT_RUN_IN_HAC);
         }
 
     };
@@ -89,7 +92,7 @@ var Android_PDA_CScan_Start_Command = (function (_super) {
             window.pda.continuous_scan(cellInfo, 0);
             console.log("启动持续扫描");
         } else {
-            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ");
+            alert(ERROR_NOT_RUN_IN_HAC);
         }
 
     };
@@ -114,7 +117,7 @@ var Android_PDA_CScan_Stop_Command = (function (_super) {
             window.pda.continuous_scan_stop();
             console.log("停止持续扫描");
         } else {
-            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ");
+            alert(ERROR_NOT_RUN_IN_HAC);
         }
 
     };
@@ -142,7 +145,7 @@ var Set_ActionBar_Color_Command = (function (_super) {
             window.app.setActionBarColor(colorS);
             console.log("标题栏颜色设置完成：" + colorS);
         } else {
-            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ");
+            alert(ERROR_NOT_RUN_IN_HAC);
         }
 
     };
@@ -174,7 +177,7 @@ var Get_ActionBar_Color_Command = (function (_super) {
             console.log("从App获取状态栏颜色");
 
         } else {
-            alert("当前APP不支持该命令，您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ");
+            alert(ERROR_NOT_RUN_IN_HAC);
         }
 
     };
@@ -184,3 +187,45 @@ var Get_ActionBar_Color_Command = (function (_super) {
 
 // Key format is "Namespace.ClassName, AssemblyName"
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_ActionBar_Color, AndroidPDACommand", Get_ActionBar_Color_Command);
+
+
+var Get_Location_Command = (function (_super) {
+    __extends(Get_Location_Command, _super);
+    function Get_Location_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Get_Location_Command.prototype.execute = function () {
+
+        //// Get setings
+        var param = this.CommandParam;
+        var cs = this.evaluateFormula(param.CS);
+
+        var latCellFormulaV = param.LatCell;
+        var latCellV = this.getCellLocation(latCellFormulaV);
+        var latCell = JSON.stringify(latCellV);
+
+        var lonCellFormulaV = param.LonCell;
+        var lonCellV = this.getCellLocation(lonCellFormulaV);
+        var lonCell = JSON.stringify(lonCellV);
+
+        var errCellFormulaV = param.ErrCell;
+        var errCellV = this.getCellLocation(errCellFormulaV);
+        var errCell = JSON.stringify(errCellV);
+
+        if (window.geo) {
+            window.geo.getLocation(cs, latCell, lonCell, errCell);
+
+            console.log("获取地理位置");
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Get_Location_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_Location, AndroidPDACommand", Get_Location_Command);
