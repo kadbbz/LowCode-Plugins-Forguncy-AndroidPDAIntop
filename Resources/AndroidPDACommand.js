@@ -268,3 +268,32 @@ var Set_Option_Menu_Command = (function (_super) {
 
 // Key format is "Namespace.ClassName, AssemblyName"
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Option_Menu, AndroidPDACommand", Set_Option_Menu_Command);
+
+var Set_Scanner_Options_Command = (function (_super) {
+    __extends(Set_Scanner_Options_Command, _super);
+    function Set_Scanner_Options_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Set_Scanner_Options_Command.prototype.execute = function () {
+
+        //// Get setings
+        var param = this.CommandParam;
+        var action = this.evaluateFormula(param.Action); // com.android.server.scan
+        var extra = this.evaluateFormula(param.Extra); // scannerdata
+
+        if (window.app) {
+            window.app.setScannerOptions(action, extra);
+            console.log("配置扫描头Action：" + action+" ，Extra："+ extra);
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Set_Scanner_Options_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Scanner_Options, AndroidPDACommand", Set_Scanner_Options_Command);
