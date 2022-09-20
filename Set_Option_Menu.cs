@@ -11,15 +11,23 @@ using System.Windows.Forms;
 namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
-    public class Get_ActionBar_Color : Command, IPropertySearchable, IForceGenerateCell
+    public class Set_Option_Menu : Command, IPropertySearchable, IForceGenerateCell
     {
         [FormulaProperty(true)]
-        [DisplayName("目标单元格")]
-        public object TargetCell { get; set; }
+        [DisplayName("是否显示【配置】菜单")]
+        public IFormulaReferObject ShouldShowSettings { get; set; }
+
+        [FormulaProperty(true)]
+        [DisplayName("【帮助】页面（留空表示隐藏该菜单）")]
+        public IFormulaReferObject HelpUrl { get; set; }
+
+        [FormulaProperty(true)]
+        [DisplayName("【关于】页面（留空表示隐藏该菜单）")]
+        public IFormulaReferObject AboutUrl { get; set; }
 
         public override string ToString()
         {
-            return "获取状态栏的颜色";
+            return "配置应用菜单项";
         }
 
         public override CommandScope GetCommandScope()
@@ -30,28 +38,12 @@ namespace AndroidPDACommand
         public IEnumerable<FindResultItem> EnumSearchableProperty(LocationIndicator location)
         {
             List<FindResultItem> result = new List<FindResultItem>();
-            result.Add(new FindResultItem()
-            {
-                Location = location.AppendProperty("目标单元格"),
-                Value = TargetCell?.ToString()
-            });
-           
-            return result ;
+            return result;
         }
 
         public IEnumerable<GenerateCellInfo> GetForceGenerateCells()
         {
             List<GenerateCellInfo> result = new List<GenerateCellInfo>();
-
-            if (TargetCell is IFormulaReferObject formulaReferObject)
-            {
-                var cellInfo = formulaReferObject.GetGenerateCellInfo();
-                if (cellInfo != null)
-                {
-                    result.Add(cellInfo);
-                }
-            }
-
             return result;
         }
     }

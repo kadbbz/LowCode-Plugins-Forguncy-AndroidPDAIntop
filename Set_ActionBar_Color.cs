@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace AndroidPDACommand
 {
-    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Color.png")]
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
     public class Set_ActionBar_Color : Command, IPropertySearchable, IForceGenerateCell
     {
         [FormulaProperty(true)]

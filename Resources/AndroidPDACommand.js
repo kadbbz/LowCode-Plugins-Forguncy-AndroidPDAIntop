@@ -17,7 +17,7 @@ var Android_PDA_Broadcast_Mode_Scan_Command = (function (_super) {
         var isModal = this.evaluateFormula(param.IsModalMode);
 
         if (window.pda) {
-            if (!isModal || isModal ===0 ) {
+            if (!isModal || isModal === 0) {
                 window.pda.continuous_scan(cellInfo, 1); // 持续扫描，但仅接收1次
                 console.log("启动单次扫描，非模态");
             } else {
@@ -229,3 +229,42 @@ var Get_Location_Command = (function (_super) {
 
 // Key format is "Namespace.ClassName, AssemblyName"
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_Location, AndroidPDACommand", Get_Location_Command);
+
+
+var Set_Option_Menu_Command = (function (_super) {
+    __extends(Set_Option_Menu_Command, _super);
+    function Set_Option_Menu_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Set_Option_Menu_Command.prototype.execute = function () {
+
+        //// Get setings
+        var param = this.CommandParam;
+        var sss = this.evaluateFormula(param.ShouldShowSettings);
+        var urla = this.evaluateFormula(param.AboutUrl);
+        var urlh = this.evaluateFormula(param.HelpUrl);
+
+        if (window.app) {
+            window.app.toggleSettingMenu(sss);
+            console.log("配置【设置】菜单：" + sss);
+
+            window.app.setHelpUrl(urlh);
+            console.log("配置【帮助】菜单：" + urlh);
+
+            window.app.setAboutUrl(urla);
+            console.log("配置【关于】菜单：" + urla);
+
+            window.app.restartApp();
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Set_Option_Menu_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Option_Menu, AndroidPDACommand", Set_Option_Menu_Command);
