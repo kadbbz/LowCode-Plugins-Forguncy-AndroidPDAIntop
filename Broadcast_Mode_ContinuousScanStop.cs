@@ -16,7 +16,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "停止持续扫码";
+            return "HAC：停止持续扫码";
         }
 
         public override CommandScope GetCommandScope()

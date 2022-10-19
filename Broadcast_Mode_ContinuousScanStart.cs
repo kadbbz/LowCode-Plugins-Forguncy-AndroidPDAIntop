@@ -19,7 +19,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "开始持续扫码到单元格";
+            return "HAC：开始持续扫码到单元格";
         }
 
         public override CommandScope GetCommandScope()

@@ -19,7 +19,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "设置标题栏的颜色";
+            return "HAC：设置ActionBar颜色";
         }
 
         public override CommandScope GetCommandScope()

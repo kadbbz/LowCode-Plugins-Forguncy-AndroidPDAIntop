@@ -65,8 +65,10 @@
     <Compile Include="App_Info.cs" />
     <Compile Include="Broadcast_Mode_ContinuousScanStop.cs" />
     <Compile Include="Broadcast_Mode_ContinuousScanStart.cs" />
-    <Compile Include="Set_Scanner_Options.cs" />
+    <Compile Include="Open_Builtin_Activity.cs" />
     <Compile Include="Set_Option_Menu.cs" />
+    <Compile Include="Set_Scanner_Options.cs" />
+    <Compile Include="Set_ActionBar_Style.cs" />
     <Compile Include="Set_ActionBar_Color.cs" />
     <Compile Include="Broadcast_Mode_Scan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

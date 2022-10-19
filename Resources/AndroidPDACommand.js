@@ -231,6 +231,83 @@ var Get_Location_Command = (function (_super) {
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_Location, AndroidPDACommand", Get_Location_Command);
 
 
+var Set_ActionBar_Style_Command = (function (_super) {
+    __extends(Set_ActionBar_Style_Command, _super);
+    function Set_ActionBar_Style_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Set_ActionBar_Style_Command.prototype.execute = function () {
+
+        //// Get setings
+        var param = this.CommandParam;
+        var ssa = this.evaluateFormula(param.ShouldShowActionBar);
+        var ac = this.evaluateFormula(param.ActionBarColor);
+        var sss = this.evaluateFormula(param.ShouldShowSettings);
+        var urla = this.evaluateFormula(param.AboutUrl);
+        var urlh = this.evaluateFormula(param.HelpUrl);
+
+        if (window.app) {
+
+            window.app.toggleActionBar(ssa);
+            console.log("配置ActionBar可见性：" + ssa);
+
+            window.app.setActionBarColor(ac);
+            console.log("配置ActionBar颜色：" + ac);
+
+            window.app.toggleSettingMenu(sss);
+            console.log("配置【设置】菜单可见性：" + sss);
+
+            window.app.setHelpUrl(urlh);
+            console.log("配置【帮助】菜单：" + urlh);
+
+            window.app.setAboutUrl(urla);
+            console.log("配置【关于】菜单：" + urla);
+
+            window.app.restartApp();
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Set_ActionBar_Style_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_ActionBar_Style, AndroidPDACommand", Set_ActionBar_Style_Command);
+
+var Set_Scanner_Options_Command = (function (_super) {
+    __extends(Set_Scanner_Options_Command, _super);
+    function Set_Scanner_Options_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Set_Scanner_Options_Command.prototype.execute = function () {
+
+        //// Get setings
+        var param = this.CommandParam;
+        var action = this.evaluateFormula(param.Action); // com.android.server.scan
+        var extra = this.evaluateFormula(param.Extra); // scannerdata
+
+        if (window.app) {
+            window.app.setScannerOptions(action, extra);
+            console.log("配置扫描头Action：" + action + " ，Extra：" + extra);
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Set_Scanner_Options_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Scanner_Options, AndroidPDACommand", Set_Scanner_Options_Command);
+
+
 var Set_Option_Menu_Command = (function (_super) {
     __extends(Set_Option_Menu_Command, _super);
     function Set_Option_Menu_Command() {
@@ -241,13 +318,15 @@ var Set_Option_Menu_Command = (function (_super) {
 
         //// Get setings
         var param = this.CommandParam;
+
         var sss = this.evaluateFormula(param.ShouldShowSettings);
         var urla = this.evaluateFormula(param.AboutUrl);
         var urlh = this.evaluateFormula(param.HelpUrl);
 
         if (window.app) {
+
             window.app.toggleSettingMenu(sss);
-            console.log("配置【设置】菜单：" + sss);
+            console.log("配置【设置】菜单可见性：" + sss);
 
             window.app.setHelpUrl(urlh);
             console.log("配置【帮助】菜单：" + urlh);
@@ -269,22 +348,32 @@ var Set_Option_Menu_Command = (function (_super) {
 // Key format is "Namespace.ClassName, AssemblyName"
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Option_Menu, AndroidPDACommand", Set_Option_Menu_Command);
 
-var Set_Scanner_Options_Command = (function (_super) {
-    __extends(Set_Scanner_Options_Command, _super);
-    function Set_Scanner_Options_Command() {
+
+var Open_Builtin_Activity_Command = (function (_super) {
+    __extends(Open_Builtin_Activity_Command, _super);
+    function Open_Builtin_Activity_Command() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
 
-    Set_Scanner_Options_Command.prototype.execute = function () {
+    Open_Builtin_Activity_Command.prototype.execute = function () {
 
         //// Get setings
         var param = this.CommandParam;
-        var action = this.evaluateFormula(param.Action); // com.android.server.scan
-        var extra = this.evaluateFormula(param.Extra); // scannerdata
 
         if (window.app) {
-            window.app.setScannerOptions(action, extra);
-            console.log("配置扫描头Action：" + action+" ，Extra："+ extra);
+
+            switch (param.TargetPage) {
+                case BuiltinPage.配置:
+                    {
+                        window.app.openSettingPage();
+                        console.log("打开配置页面");
+                        break;
+                    } case BuiltinPage.快速设置: {
+                        window.app.openQuickConfigPage();
+                        console.log("打开快速初始化页面");
+                        break;
+                    }
+            }
 
         } else {
             alert(ERROR_NOT_RUN_IN_HAC);
@@ -292,8 +381,13 @@ var Set_Scanner_Options_Command = (function (_super) {
 
     };
 
-    return Set_Scanner_Options_Command;
+    return Open_Builtin_Activity_Command;
 }(Forguncy.CommandBase));
 
+var BuiltinPage = {
+    配置: 0,
+    快速设置: 1
+}
+
 // Key format is "Namespace.ClassName, AssemblyName"
-Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Scanner_Options, AndroidPDACommand", Set_Scanner_Options_Command);
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Open_Builtin_Activity, AndroidPDACommand", Open_Builtin_Activity_Command);

@@ -23,7 +23,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "单次扫码到单元格";
+            return "HAC：单次扫码到单元格";
         }
 
         public override CommandScope GetCommandScope()

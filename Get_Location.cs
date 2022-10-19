@@ -33,7 +33,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "获取地理位置";
+            return "HAC：获取地理位置";
         }
 
         public override CommandScope GetCommandScope()

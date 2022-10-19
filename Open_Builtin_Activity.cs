@@ -11,20 +11,14 @@ using System.Windows.Forms;
 namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
-    public class Set_Scanner_Options : Command, IPropertySearchable, IForceGenerateCell
+    public class Open_Builtin_Activity : Command, IPropertySearchable, IForceGenerateCell
     {
-        [FormulaProperty(true)]
-        [DisplayName("广播名称（Action）")]
-        public IFormulaReferObject Action { get; set; }
+        [DisplayName("目标页面")]
+        public BuiltinPage TargetPage { get; set; }
 
-        [FormulaProperty(true)]
-        [DisplayName("广播键值（Extra）")]
-        public IFormulaReferObject Extra { get; set; }
-
-       
         public override string ToString()
         {
-            return "HAC：配置扫描头参数";
+            return "HAC：打开内置页面";
         }
 
         public override CommandScope GetCommandScope()
@@ -43,5 +37,11 @@ namespace AndroidPDACommand
             List<GenerateCellInfo> result = new List<GenerateCellInfo>();
             return result;
         }
+    }
+
+    public enum BuiltinPage
+    {
+        配置,
+        快速设置
     }
 }

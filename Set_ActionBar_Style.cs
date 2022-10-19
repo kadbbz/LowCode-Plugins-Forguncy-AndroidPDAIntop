@@ -11,20 +11,32 @@ using System.Windows.Forms;
 namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
-    public class Set_Scanner_Options : Command, IPropertySearchable, IForceGenerateCell
+    public class Set_ActionBar_Style : Command, IPropertySearchable, IForceGenerateCell
     {
-        [FormulaProperty(true)]
-        [DisplayName("广播名称（Action）")]
-        public IFormulaReferObject Action { get; set; }
 
         [FormulaProperty(true)]
-        [DisplayName("广播键值（Extra）")]
-        public IFormulaReferObject Extra { get; set; }
+        [DisplayName("是否显示状态栏（ActionBar）")]
+        public IFormulaReferObject ShouldShowActionBar { get; set; }
 
-       
+        [FormulaProperty(true)]
+        [DisplayName("状态栏颜色（格式为FFFFFF，RGB）")]
+        public object ActionBarColor { get; set; }
+
+        [FormulaProperty(true)]
+        [DisplayName("菜单：是否显示【配置】")]
+        public IFormulaReferObject ShouldShowSettings { get; set; }
+
+        [FormulaProperty(true)]
+        [DisplayName("菜单：【帮助】页面（留空表示隐藏该菜单）")]
+        public IFormulaReferObject HelpUrl { get; set; }
+
+        [FormulaProperty(true)]
+        [DisplayName("菜单：【关于】页面（留空表示隐藏该菜单）")]
+        public IFormulaReferObject AboutUrl { get; set; }
+
         public override string ToString()
         {
-            return "HAC：配置扫描头参数";
+            return "HAC：配置ActionBar";
         }
 
         public override CommandScope GetCommandScope()

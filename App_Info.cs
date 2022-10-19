@@ -23,7 +23,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "获取安卓APP信息";
+            return "HAC：获取APP信息";
         }
 
         public override CommandScope GetCommandScope()
