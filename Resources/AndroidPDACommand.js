@@ -391,3 +391,61 @@ var BuiltinPage = {
 
 // Key format is "Namespace.ClassName, AssemblyName"
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Open_Builtin_Activity, AndroidPDACommand", Open_Builtin_Activity_Command);
+
+
+var Upsert_LocalKv_Command = (function (_super) {
+    __extends(Upsert_LocalKv_Command, _super);
+    function Upsert_LocalKv_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Upsert_LocalKv_Command.prototype.execute = function () {
+
+        // Get setings
+        var param = this.CommandParam;
+        var key = this.evaluateFormula(param.KeyString);
+        var value = this.evaluateFormula(param.ValueString);
+
+        if (window.localKv) {
+            window.localKv.upsert(key,value);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Upsert_LocalKv_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Upsert_LocalKv, AndroidPDACommand", Upsert_LocalKv_Command);
+
+
+var Retrieve_LocalKv_Command = (function (_super) {
+    __extends(Retrieve_LocalKv_Command, _super);
+    function Retrieve_LocalKv_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Retrieve_LocalKv_Command.prototype.execute = function () {
+
+        // Get setings
+        var param = this.CommandParam;
+        var key = this.evaluateFormula(param.KeyString);
+        var targetCellFormulaV = param.TargetCell;
+        var cellLocationV = this.getCellLocation(targetCellFormulaV);
+        var cellInfoV = JSON.stringify(cellLocationV);
+
+        if (window.localKv) {
+            window.localKv.retrieve(key, cellInfoV);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Retrieve_LocalKv_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Retrieve_LocalKv, AndroidPDACommand", Retrieve_LocalKv_Command);
