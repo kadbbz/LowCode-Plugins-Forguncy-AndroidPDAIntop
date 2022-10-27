@@ -67,6 +67,7 @@
     <Compile Include="Broadcast_Mode_ContinuousScanStop.cs" />
     <Compile Include="Broadcast_Mode_ContinuousScanStart.cs" />
     <Compile Include="Open_Builtin_Activity.cs" />
+    <Compile Include="Reset_LocalKv.cs" />
     <Compile Include="Upsert_LocalKv.cs" />
     <Compile Include="Set_Option_Menu.cs" />
     <Compile Include="Set_Scanner_Options.cs" />

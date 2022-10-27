@@ -449,3 +449,29 @@ var Retrieve_LocalKv_Command = (function (_super) {
 
 // Key format is "Namespace.ClassName, AssemblyName"
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Retrieve_LocalKv, AndroidPDACommand", Retrieve_LocalKv_Command);
+
+var Reset_LocalKv_Command = (function (_super) {
+    __extends(Reset_LocalKv_Command, _super);
+    function Reset_LocalKv_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Reset_LocalKv_Command.prototype.execute = function () {
+
+        // Get setings
+        var param = this.CommandParam;
+        var key = this.evaluateFormula(param.KeyString);
+
+        if (window.localKv) {
+            window.localKv.remove(key);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Reset_LocalKv_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Reset_LocalKv, AndroidPDACommand", Reset_LocalKv_Command);

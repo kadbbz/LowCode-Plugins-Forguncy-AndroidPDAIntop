@@ -8,10 +8,10 @@
   "css": [],
   "image": "Resources/PluginLogo.png",
   "description": "本插件是PDA解决方案的一部分，提供安卓PDA的扫码（广播模式）、获取地理位置、APP配置等功能，需配合HAC使用。",
-  "name": "PDA交互命令",
+  "name": "Android/PDA交互命令",
   "pluginType": "command",
   "guid": "{16B8DF69-1379-41C1-9194-BE89BAF8BB32}",
-  "version": "1.4.0.0",
+  "version": "1.5.0.0",
   "dependenceVersion": "8.0.102.0",
   "bundleJavaScript": true,
   "bundleCSS": true

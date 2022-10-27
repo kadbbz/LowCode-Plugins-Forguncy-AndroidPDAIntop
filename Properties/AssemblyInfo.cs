@@ -6,7 +6,7 @@ using Forguncy;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PDA交互命令")]
+[assembly: AssemblyTitle("Android/PDA交互命令")]
 [assembly: AssemblyDescription("本插件是PDA解决方案的一部分，提供Android PDA/Android 手机/鸿蒙 OS 手机的扫码（广播模式）、获取地理位置、APP个性化配置等功能，需配合HAC（活字格Android容器）使用。")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("GrapeCity inc.")]
@@ -33,5 +33,5 @@ using Forguncy;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.4.0.0")]
-[assembly: AssemblyFileVersion("1.4.0.0")]
+[assembly: AssemblyVersion("1.5.0.0")]
+[assembly: AssemblyFileVersion("1.5.0.0")]
