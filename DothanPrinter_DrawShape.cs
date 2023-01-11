@@ -25,7 +25,7 @@ namespace AndroidPDACommand
             }
             else
             {
-                return "绘制蓝牙打印内容（DothanTech版）：" + Operation.ToString();
+                return "绘制蓝牙打印的图形（DothanTech版）：" + Operation.ToString();
             }
         }
 
