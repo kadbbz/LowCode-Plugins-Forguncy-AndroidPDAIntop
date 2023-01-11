@@ -10,7 +10,9 @@ using System.Windows.Forms;
 
 namespace AndroidPDACommand
 {
-    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Kv.png")]
+    [Category("活字格安卓容器（HAC）")]
+    [OrderWeight(404)]
     public class Retrieve_LocalKv : Command, IPropertySearchable, IForceGenerateCell
     {
         [FormulaProperty(true)]
@@ -23,7 +25,14 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "HAC：从离线存储中读取";
+            if (KeyString == null)
+            {
+                return "从离线存储中读取到单元格"; // 命令列表中默认显示的名称
+            }
+            else
+            {
+                return "从离线存储中读取到单元格：" + KeyString.ToString();
+            }
         }
 
         public override CommandScope GetCommandScope()

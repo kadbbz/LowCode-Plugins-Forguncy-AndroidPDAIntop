@@ -407,7 +407,7 @@ var Upsert_LocalKv_Command = (function (_super) {
         var value = this.evaluateFormula(param.ValueString);
 
         if (window.localKv) {
-            window.localKv.upsert(key,value);
+            window.localKv.upsert(key, value);
         } else {
             alert(ERROR_NOT_RUN_IN_HAC);
         }
@@ -450,6 +450,41 @@ var Retrieve_LocalKv_Command = (function (_super) {
 // Key format is "Namespace.ClassName, AssemblyName"
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Retrieve_LocalKv, AndroidPDACommand", Retrieve_LocalKv_Command);
 
+var Retrieve_LocalKv_Command2 = (function (_super) {
+    __extends(Retrieve_LocalKv_Command2, _super);
+    function Retrieve_LocalKv_Command2() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Retrieve_LocalKv_Command2.prototype.execute = function () {
+
+        // Get setings
+        var param = this.CommandParam;
+        var key = this.evaluateFormula(param.KeyString);
+
+        if (window.localKv && window.localKv.retrieve2) {
+            var value = window.localKv.retrieve2(key);
+
+            this.CommandExecutor.excuteCommand(this.CommandParam.CommandList, {
+                runTimePageName: this.CommandExecutingInfo.runTimePageName,
+                commandID: "Retrieve_LocalKv_Command2",
+                initParams: {
+                    "LocalValue": value
+                }
+            });
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Retrieve_LocalKv_Command2;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Retrieve_LocalKv2, AndroidPDACommand", Retrieve_LocalKv_Command2);
+
 var Reset_LocalKv_Command = (function (_super) {
     __extends(Reset_LocalKv_Command, _super);
     function Reset_LocalKv_Command() {
@@ -475,3 +510,491 @@ var Reset_LocalKv_Command = (function (_super) {
 
 // Key format is "Namespace.ClassName, AssemblyName"
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Reset_LocalKv, AndroidPDACommand", Reset_LocalKv_Command);
+
+var HAC_DothanPrinterOp = function (callback) {
+    if (window.dothanPrinter) {
+        var status = window.dothanPrinter.getStatus();
+        if (status === 1 || status === 2) {
+            callback(true);
+        } else {
+            callback(false, status);
+        }
+    } else {
+        alert(ERROR_NOT_RUN_IN_HAC);
+        callback(false, -1);
+    }
+};
+
+var HAC_ReturnToParam = function (OutParamaterName, data) {
+    if (OutParamaterName && OutParamaterName != "") {
+        Forguncy.CommandHelper.setVariableValue(OutParamaterName, data);
+    } else {
+        console.log("OutParamaterName was not set, the value is: " + JSON.stringify(data));
+    }
+};
+
+var OpenDothanPrinter_Command = (function (_super) {
+    __extends(OpenDothanPrinter_Command, _super);
+    function OpenDothanPrinter_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    OpenDothanPrinter_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var Operation = params.Operation;
+        var pName = this.evaluateFormula(params.PrinterName);
+        var OutParamaterName = params.OutParamaterName;
+
+        var api = new LPAPI();
+
+        switch (Operation) {
+            case SupportedOperations.GetPrinterState: {
+
+                if (window.dothanPrinter) {
+                    var status = window.dothanPrinter.getStatus();
+                    HAC_ReturnToParam(OutParamaterName, status);
+                } else {
+                    alert(ERROR_NOT_RUN_IN_HAC);
+                    HAC_ReturnToParam(OutParamaterName, false);
+                }
+
+                break;
+            }
+            case SupportedOperations.GetAllPrinters: {
+                var printers = api.getAllPrinters();
+
+                var array = printers.split(',');
+
+                HAC_ReturnToParam(OutParamaterName, array);
+                break;
+            }
+            case SupportedOperations.OpenPrinter: {
+                var result = api.openPrinterSync(pName);
+                console.log("[DothanPrinter] Connection to the printer openned and ready for use");
+                HAC_ReturnToParam(OutParamaterName, result);
+                break;
+            }
+            case SupportedOperations.ReopenPrinter: {
+                var result = api.reopenPrinterSync();
+                console.log("[DothanPrinter] Connection to the printer reopenned");
+                HAC_ReturnToParam(OutParamaterName, result);
+                break;
+            }
+            case SupportedOperations.ClosePrinter: {
+                var result = api.closePrinter();
+                console.log("[DothanPrinter] Connection to the printer closed");
+                break;
+            }
+            case SupportedOperations.Cancel: {
+                api.cancel();
+                break;
+            }
+        }
+
+    };
+
+    var SupportedOperations = {
+        GetPrinterState: 0,
+        OpenPrinter: 1,
+        ReopenPrinter: 2,
+        GetAllPrinters: 3,
+        Cancel: 4,
+        ClosePrinter: 5
+    }
+
+    return OpenDothanPrinter_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_Device, AndroidPDACommand", OpenDothanPrinter_Command);
+
+var JobDothanPrinter_Command = (function (_super) {
+    __extends(JobDothanPrinter_Command, _super);
+    function JobDothanPrinter_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    JobDothanPrinter_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var Operation = params.Operation;
+        var Width = parseFloat(this.evaluateFormula(params.Width));
+        var Height = parseFloat(this.evaluateFormula(params.Height));
+        var Orientation = this.evaluateFormula(params.Orientation);
+        var OutParamaterName = params.OutParamaterName;
+
+        var api = new LPAPI();
+
+        switch (Operation) {
+            case SupportedOperations.StartJob: {
+
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+                        var result = api.startJob(Width, Height, Orientation);
+                        console.log("[DothanPrinter] Job started");
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.CommitJob: {
+
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+                        var result = api.commitJob();
+                        console.log("[DothanPrinter] Job committed, ready for printing");
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.AbortJob: {
+
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+                        var result = api.abortJob();
+
+                        console.log("[DothanPrinter] Job aborted");
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+        }
+    };
+
+    var SupportedOperations = {
+        StartJob: 0,
+        CommitJob: 1,
+        AbortJob: 2
+    }
+
+    return JobDothanPrinter_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_Job, AndroidPDACommand", JobDothanPrinter_Command);
+
+var DothanPrinter_DrawContent_Command = (function (_super) {
+    __extends(DothanPrinter_DrawContent_Command, _super);
+    function DothanPrinter_DrawContent_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    DothanPrinter_DrawContent_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var Operation = params.Operation;
+        var Text = this.evaluateFormula(params.Text);
+        var X = parseFloat(this.evaluateFormula(params.X));
+        var Y = parseFloat(this.evaluateFormula(params.Y));
+        var FontHeight = parseFloat(this.evaluateFormula(params.FontHeight));
+
+        var FontStyle = this.evaluateFormula(params.FontStyle);
+        var HorizonAlignment = params.HorizonAlignment;
+        var VerticalAlignment = params.VerticalAlignment;
+
+        var BarcodeType = params.BarcodeType;
+        var W = parseFloat(this.evaluateFormula(params.Width));
+        var H = parseFloat(this.evaluateFormula(params.Height));
+
+        var Orientation = params.Orientation;
+        var OutParamaterName = params.OutParamaterName;
+
+        var api = new LPAPI();
+
+        switch (Operation) {
+            case SupportedOperations.Text: {
+
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+                        api.setItemOrientation(Orientation);
+                        api.setItemHorizontalAlignment(HorizonAlignment);
+                        api.setItemVerticalAlignment(VerticalAlignment);
+
+                        var result = api.drawText(Text, X, Y, 0, 0, FontHeight, FontStyle);
+
+                        console.log("[DothanPrinter] Draw text: " + Text);
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.Barcode: {
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+                        api.setItemOrientation(Orientation);
+                        api.setItemHorizontalAlignment(3);
+                        api.setItemVerticalAlignment(3);
+
+                        var result = api.draw1DBarcode(Text, BarcodeType, X, Y, W, H, FontHeight);
+
+                        console.log("[DothanPrinter] Draw Barcode: " + Text);
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.QRCode: {
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+                        api.setItemOrientation(Orientation);
+
+                        var result = api.draw2DQRCode(Text, X, Y, W);
+
+                        console.log("[DothanPrinter] Draw QRCode: " + Text);
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.Pdf417: {
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+                        api.setItemOrientation(Orientation);
+
+                        var result = api.draw2DPdf417(Text, X, Y, W, H);
+
+                        console.log("[DothanPrinter] Draw Pdf417: " + Text);
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+        }
+    };
+
+    var SupportedOperations = {
+        Text: 0,
+        Barcode: 1,
+        QRCode: 2,
+        Pdf417: 3
+    }
+
+    return DothanPrinter_DrawContent_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_DrawContent, AndroidPDACommand", DothanPrinter_DrawContent_Command);
+
+var DothanPrinter_DrawShape_Command = (function (_super) {
+    __extends(DothanPrinter_DrawShape_Command, _super);
+    function DothanPrinter_DrawShape_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    DothanPrinter_DrawShape_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var Operation = params.Operation;
+        var X = parseFloat(this.evaluateFormula(params.X));
+        var Y = parseFloat(this.evaluateFormula(params.Y));
+        var X2 = parseFloat(this.evaluateFormula(params.X2));
+        var Y2 = parseFloat(this.evaluateFormula(params.Y2));
+        var LineWidth = parseFloat(this.evaluateFormula(params.LineWidth));
+        var CornerWidth = parseFloat(this.evaluateFormula(params.CornerWidth));
+
+        var LineType = params.LineType;
+        var W = parseFloat(this.evaluateFormula(params.Width));
+        var H = parseFloat(this.evaluateFormula(params.Height));
+
+        var Orientation = params.Orientation;
+        var OutParamaterName = params.OutParamaterName;
+
+        var api = new LPAPI();
+
+        switch (Operation) {
+            case SupportedOperations.DrawLine: {
+
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+
+                        var result;
+
+                        switch (LineType) {
+                            case SupportedLineType.Solid: {
+
+                                result = api.drawLine(X, Y, X2, Y2, LineWidth);
+                                break;
+                            }
+                            case SupportedLineType.Dot: {
+
+                                // . . . .
+                                result = api.drawDashLine2(X, Y, X2, Y2, LineWidth, LineWidth, LineWidth * 2);
+                                break;
+                            }
+                            case SupportedLineType.Dash: {
+
+                                // - - - -
+                                result = api.drawDashLine2(X, Y, X2, Y2, LineWidth, LineWidth * 10, LineWidth * 10);
+                                break;
+                            }
+                        }
+
+                        console.log("[DothanPrinter] Draw line");
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.DrawRectangle: {
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+
+                        var result = api.drawRectangle(X, Y, W, H, LineWidth);
+
+                        console.log("[DothanPrinter] Draw Rectangle");
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.FillRectangle: {
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+
+                        var result = api.fillRectangle(X, Y, W, H);
+
+                        console.log("[DothanPrinter] Fill Rectangle");
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.DrawRoundRectangle: {
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+
+                        var result = api.drawRoundRectangle(X, Y, W, H, CornerWidth,CornerWidth,LineWidth);
+
+                        console.log("[DothanPrinter] Draw Round Rectangle");
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.FillRoundRectangle: {
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+
+                        var result = api.fillRoundRectangle(X, Y, W, H, CornerWidth, CornerWidth);
+
+                        console.log("[DothanPrinter] Fill Round Rectangle");
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.DrawEllipse: {
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+
+                        var result = api.drawEllipse(X, Y, W, H, LineWidth);
+
+                        console.log("[DothanPrinter] Draw Ellipse");
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+            case SupportedOperations.FillEllipse: {
+                HAC_DothanPrinterOp(function (s, c) {
+                    if (s) {
+
+                        var result = api.fillEllipse(X, Y, W, H);
+
+                        console.log("[DothanPrinter] Fill Ellipse");
+
+                        HAC_ReturnToParam(OutParamaterName, result);
+                    } else {
+                        console.log("[DothanPrinter] The primary printer is not ready. The status is: " + c);
+                        HAC_ReturnToParam(OutParamaterName, false);
+                    }
+                });
+
+                break;
+            }
+        }
+    };
+
+    var SupportedOperations = {
+        DrawLine: 0,
+        DrawRectangle: 1,
+        FillRectangle: 2,
+        DrawRoundRectangle: 3,
+        FillRoundRectangle: 4,
+        DrawEllipse: 5,
+        FillEllipse: 6
+    };
+
+    var SupportedLineType = {
+        Solid: 0,
+        Dot: 1,
+        Dash: 2
+    };
+
+    return DothanPrinter_DrawShape_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_DrawShape, AndroidPDACommand", DothanPrinter_DrawShape_Command);

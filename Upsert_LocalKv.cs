@@ -10,7 +10,9 @@ using System.Windows.Forms;
 
 namespace AndroidPDACommand
 {
-    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Kv.png")]
+    [Category("活字格安卓容器（HAC）")]
+    [OrderWeight(401)]
     public class Upsert_LocalKv : Command, IPropertySearchable, IForceGenerateCell
     {
         [FormulaProperty(true)]
@@ -23,7 +25,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "HAC：存入离线存储";
+            return "将键值存入离线存储";
         }
 
         public override CommandScope GetCommandScope()

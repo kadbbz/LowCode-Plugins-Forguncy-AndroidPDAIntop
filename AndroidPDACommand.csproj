@@ -60,6 +60,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DothanPrinter_Device.cs" />
+    <Compile Include="DothanPrinter_DrawShape.cs" />
+    <Compile Include="DothanPrinter_DrawContent.cs" />
+    <Compile Include="DothanPrinter_Job.cs" />
+    <Compile Include="Retrieve_LocalKv2.cs" />
     <Compile Include="Retrieve_LocalKv.cs" />
     <Compile Include="Get_Location.cs" />
     <Compile Include="Get_ActionBar_Color.cs" />
@@ -90,7 +95,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\LPAPI-0.4.20181022.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icon_Info.png" />
   </ItemGroup>
@@ -98,8 +107,20 @@
     <Resource Include="Resources\Icon_Color.png" />
     <Resource Include="Resources\Icon_Location.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icon_Printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icon_Kv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icon_Phone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icon_Settings.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"D:\CODE\PluginTools\PluginPackageTool\bin\Release\PluginPackageTool.exe" "$(ProjectDir)\" "$(ConfigurationName)"</PostBuildEvent>
+    <PostBuildEvent>"E:\CODE\PluginTools\PluginPackageTool\bin\Release\PluginPackageTool.exe" "$(ProjectDir)\" "$(ConfigurationName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

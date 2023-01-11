@@ -10,7 +10,9 @@ using System.Windows.Forms;
 
 namespace AndroidPDACommand
 {
-    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Settings.png")]
+    [Category("活字格安卓容器（HAC）")]
+    [OrderWeight(810)]
     public class Set_ActionBar_Color : Command, IPropertySearchable, IForceGenerateCell
     {
         [FormulaProperty(true)]
@@ -19,7 +21,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "HAC：设置ActionBar颜色";
+            return "配置APP的ActionBar颜色";
         }
 
         public override CommandScope GetCommandScope()

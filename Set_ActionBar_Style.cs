@@ -10,7 +10,9 @@ using System.Windows.Forms;
 
 namespace AndroidPDACommand
 {
-    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Settings.png")]
+    [Category("活字格安卓容器（HAC）")]
+    [OrderWeight(800)]
     public class Set_ActionBar_Style : Command, IPropertySearchable, IForceGenerateCell
     {
 
@@ -36,7 +38,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "HAC：配置ActionBar";
+            return "配置APP的ActionBar";
         }
 
         public override CommandScope GetCommandScope()

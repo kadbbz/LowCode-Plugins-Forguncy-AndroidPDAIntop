@@ -10,7 +10,9 @@ using System.Windows.Forms;
 
 namespace AndroidPDACommand
 {
-    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Phone.png")]
+    [Category("活字格安卓容器（HAC）")]
+    [OrderWeight(900)]
     public class Open_Builtin_Activity : Command, IPropertySearchable, IForceGenerateCell
     {
         [DisplayName("目标页面")]
@@ -18,7 +20,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "HAC：打开内置页面";
+            return "打开APP的内置页面";
         }
 
         public override CommandScope GetCommandScope()

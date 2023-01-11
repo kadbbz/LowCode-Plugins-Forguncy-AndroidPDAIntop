@@ -10,7 +10,9 @@ using System.Windows.Forms;
 
 namespace AndroidPDACommand
 {
-    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Location.png")]
+    [Category("活字格安卓容器（HAC）")]
+    [OrderWeight(100)]
     public class Get_Location : Command, IPropertySearchable, IForceGenerateCell
     {
 
@@ -33,7 +35,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "HAC：获取地理位置";
+            return "读取地理位置到单元格";
         }
 
         public override CommandScope GetCommandScope()

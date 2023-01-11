@@ -10,7 +10,9 @@ using System.Windows.Forms;
 
 namespace AndroidPDACommand
 {
-    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Phone.png")]
+    [Category("活字格安卓容器（HAC）")]
+    [OrderWeight(901)]
     public class App_Info : Command, IPropertySearchable, IForceGenerateCell
     {
         [FormulaProperty(true)]
@@ -23,7 +25,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "HAC：获取APP信息";
+            return "读取APP信息到单元格";
         }
 
         public override CommandScope GetCommandScope()
@@ -33,17 +35,19 @@ namespace AndroidPDACommand
 
         public IEnumerable<FindResultItem> EnumSearchableProperty(LocationIndicator location)
         {
-            List<FindResultItem> result = new List<FindResultItem>();
-            result.Add(new FindResultItem()
+            List<FindResultItem> result = new List<FindResultItem>
             {
-                Location = location.AppendProperty("目标单元格（版本）"),
-                Value = TargetCellVersion?.ToString()
-            });
-            result.Add(new FindResultItem()
-            {
-                Location = location.AppendProperty("目标单元格（包名）"),
-                Value = TargetCellPackage?.ToString()
-            });
+                new FindResultItem()
+                {
+                    Location = location.AppendProperty("目标单元格（版本）"),
+                    Value = TargetCellVersion?.ToString()
+                },
+                new FindResultItem()
+                {
+                    Location = location.AppendProperty("目标单元格（包名）"),
+                    Value = TargetCellPackage?.ToString()
+                }
+            };
 
 
             return result ;

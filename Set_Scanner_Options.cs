@@ -10,7 +10,9 @@ using System.Windows.Forms;
 
 namespace AndroidPDACommand
 {
-    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Info.png")]
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Settings.png")]
+    [Category("活字格安卓容器（HAC）")]
+    [OrderWeight(805)]
     public class Set_Scanner_Options : Command, IPropertySearchable, IForceGenerateCell
     {
         [FormulaProperty(true)]
@@ -24,7 +26,7 @@ namespace AndroidPDACommand
        
         public override string ToString()
         {
-            return "HAC：配置扫描头参数";
+            return "配置扫描头参数";
         }
 
         public override CommandScope GetCommandScope()
