@@ -992,59 +992,26 @@ var DothanPrinter_DrawShape_Command = (function (_super) {
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_DrawShape, AndroidPDACommand", DothanPrinter_DrawShape_Command);
 
-var EcsPosPrinter_All_Command = (function (_super) {
-    __extends(EcsPosPrinter_All_Command, _super);
-    function EcsPosPrinter_All_Command() {
+var NfcReader_Command = (function (_super) {
+    __extends(NfcReader_Command, _super);
+    function NfcReader_Command() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
 
-    EcsPosPrinter_All_Command.prototype.execute = function () {
+    NfcReader_Command.prototype.execute = function () {
         var params = this.CommandParam;
-        var Operation = params.Operation;
-        var Width = parseFloat(this.evaluateFormula(params.Width));
-        var DPI = parseInt(this.evaluateFormula(params.DPI));
-        var NbrPerLine = parseInt(this.evaluateFormula(params.NbrCharactersPerLine));
-        var PrinterName = this.evaluateFormula(params.PrinterName);
-        var Commands = this.evaluateFormula(params.Commands);
-        var OutParamaterName = params.OutParamaterName;
+  
+        var TagCell = JSON.stringify(this.getCellLocation(params.TagCell));
 
-        switch (Operation) {
-            case SupportedOperations.GetAllPrinters: {
-
-                if (window.ecsPosPrinter) {
-                    var printers = window.ecsPosPrinter.GetAllPrinters();
-
-                    var array = printers.split(',');
-
-                    HAC_ReturnToParam(OutParamaterName, array);
-                } else {
-                    alert(ERROR_NOT_RUN_IN_HAC);
-                }
-
-                break;
-            }
-            case SupportedOperations.Print: {
-
-                if (window.ecsPosPrinter) {
-                    var value = window.ecsPosPrinter.Print(PrinterName, DPI, Width, NbrPerLine, Commands);
-                    HAC_ReturnToParam(OutParamaterName, value);
-                } else {
-                    alert(ERROR_NOT_RUN_IN_HAC);
-                }
-
-                break;
-            }
-
-        }
+        if (window.nfc) {
+            window.nfc.readTagId(TagCell);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }       
     };
 
-    var SupportedOperations = {
-        GetAllPrinters: 0,
-        Print: 1
-    }
-
-    return EcsPosPrinter_All_Command;
+    return NfcReader_Command;
 }(Forguncy.CommandBase));
 
 
-Forguncy.CommandFactory.registerCommand("AndroidPDACommand.EcsPosPrinter_All, AndroidPDACommand", EcsPosPrinter_All_Command);
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.NfcReader, AndroidPDACommand", NfcReader_Command);
