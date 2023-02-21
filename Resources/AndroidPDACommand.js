@@ -34,7 +34,7 @@ var Android_PDA_Broadcast_Mode_Scan_Command = (function (_super) {
     return Android_PDA_Broadcast_Mode_Scan_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Broadcast_Mode_Scan, AndroidPDACommand", Android_PDA_Broadcast_Mode_Scan_Command);
 
 
@@ -71,7 +71,7 @@ var Android_PDA_App_Info_Command = (function (_super) {
     return Android_PDA_App_Info_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.App_Info, AndroidPDACommand", Android_PDA_App_Info_Command);
 
 var Android_PDA_CScan_Start_Command = (function (_super) {
@@ -101,7 +101,7 @@ var Android_PDA_CScan_Start_Command = (function (_super) {
     return Android_PDA_CScan_Start_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Broadcast_Mode_ContinuousScanStart, AndroidPDACommand", Android_PDA_CScan_Start_Command);
 
 var Android_PDA_CScan_Stop_Command = (function (_super) {
@@ -125,7 +125,7 @@ var Android_PDA_CScan_Stop_Command = (function (_super) {
     return Android_PDA_CScan_Stop_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Broadcast_Mode_ContinuousScanStop, AndroidPDACommand", Android_PDA_CScan_Stop_Command);
 
 
@@ -153,7 +153,7 @@ var Set_ActionBar_Color_Command = (function (_super) {
     return Set_ActionBar_Color_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_ActionBar_Color, AndroidPDACommand", Set_ActionBar_Color_Command);
 
 
@@ -185,7 +185,7 @@ var Get_ActionBar_Color_Command = (function (_super) {
     return Get_ActionBar_Color_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_ActionBar_Color, AndroidPDACommand", Get_ActionBar_Color_Command);
 
 
@@ -227,7 +227,7 @@ var Get_Location_Command = (function (_super) {
     return Get_Location_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_Location, AndroidPDACommand", Get_Location_Command);
 
 
@@ -275,7 +275,7 @@ var Set_ActionBar_Style_Command = (function (_super) {
     return Set_ActionBar_Style_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_ActionBar_Style, AndroidPDACommand", Set_ActionBar_Style_Command);
 
 var Set_Scanner_Options_Command = (function (_super) {
@@ -304,7 +304,7 @@ var Set_Scanner_Options_Command = (function (_super) {
     return Set_Scanner_Options_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Scanner_Options, AndroidPDACommand", Set_Scanner_Options_Command);
 
 
@@ -345,7 +345,7 @@ var Set_Option_Menu_Command = (function (_super) {
     return Set_Option_Menu_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Option_Menu, AndroidPDACommand", Set_Option_Menu_Command);
 
 
@@ -389,7 +389,7 @@ var BuiltinPage = {
     快速设置: 1
 }
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Open_Builtin_Activity, AndroidPDACommand", Open_Builtin_Activity_Command);
 
 
@@ -417,7 +417,7 @@ var Upsert_LocalKv_Command = (function (_super) {
     return Upsert_LocalKv_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Upsert_LocalKv, AndroidPDACommand", Upsert_LocalKv_Command);
 
 
@@ -447,7 +447,7 @@ var Retrieve_LocalKv_Command = (function (_super) {
     return Retrieve_LocalKv_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Retrieve_LocalKv, AndroidPDACommand", Retrieve_LocalKv_Command);
 
 var Retrieve_LocalKv_Command2 = (function (_super) {
@@ -461,18 +461,11 @@ var Retrieve_LocalKv_Command2 = (function (_super) {
         // Get setings
         var param = this.CommandParam;
         var key = this.evaluateFormula(param.KeyString);
+        var pName = param.OutParamaterName;
 
         if (window.localKv && window.localKv.retrieve2) {
             var value = window.localKv.retrieve2(key);
-
-            this.CommandExecutor.excuteCommand(this.CommandParam.CommandList, {
-                runTimePageName: this.CommandExecutingInfo.runTimePageName,
-                commandID: "Retrieve_LocalKv_Command2",
-                initParams: {
-                    "LocalValue": value
-                }
-            });
-
+            HAC_ReturnToParam(pName, value);
         } else {
             alert(ERROR_NOT_RUN_IN_HAC);
         }
@@ -482,7 +475,7 @@ var Retrieve_LocalKv_Command2 = (function (_super) {
     return Retrieve_LocalKv_Command2;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Retrieve_LocalKv2, AndroidPDACommand", Retrieve_LocalKv_Command2);
 
 var Reset_LocalKv_Command = (function (_super) {
@@ -508,7 +501,7 @@ var Reset_LocalKv_Command = (function (_super) {
     return Reset_LocalKv_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Reset_LocalKv, AndroidPDACommand", Reset_LocalKv_Command);
 
 var HAC_DothanPrinterOp = function (callback) {
@@ -605,7 +598,7 @@ var OpenDothanPrinter_Command = (function (_super) {
     return OpenDothanPrinter_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_Device, AndroidPDACommand", OpenDothanPrinter_Command);
 
 var JobDothanPrinter_Command = (function (_super) {
@@ -684,7 +677,7 @@ var JobDothanPrinter_Command = (function (_super) {
     return JobDothanPrinter_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_Job, AndroidPDACommand", JobDothanPrinter_Command);
 
 var DothanPrinter_DrawContent_Command = (function (_super) {
@@ -805,7 +798,7 @@ var DothanPrinter_DrawContent_Command = (function (_super) {
     return DothanPrinter_DrawContent_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_DrawContent, AndroidPDACommand", DothanPrinter_DrawContent_Command);
 
 var DothanPrinter_DrawShape_Command = (function (_super) {
@@ -910,7 +903,7 @@ var DothanPrinter_DrawShape_Command = (function (_super) {
                 HAC_DothanPrinterOp(function (s, c) {
                     if (s) {
 
-                        var result = api.drawRoundRectangle(X, Y, W, H, CornerWidth,CornerWidth,LineWidth);
+                        var result = api.drawRoundRectangle(X, Y, W, H, CornerWidth, CornerWidth, LineWidth);
 
                         console.log("[DothanPrinter] Draw Round Rectangle");
 
@@ -996,5 +989,62 @@ var DothanPrinter_DrawShape_Command = (function (_super) {
     return DothanPrinter_DrawShape_Command;
 }(Forguncy.CommandBase));
 
-// Key format is "Namespace.ClassName, AssemblyName"
+
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_DrawShape, AndroidPDACommand", DothanPrinter_DrawShape_Command);
+
+var EcsPosPrinter_All_Command = (function (_super) {
+    __extends(EcsPosPrinter_All_Command, _super);
+    function EcsPosPrinter_All_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    EcsPosPrinter_All_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var Operation = params.Operation;
+        var Width = parseFloat(this.evaluateFormula(params.Width));
+        var DPI = parseInt(this.evaluateFormula(params.DPI));
+        var NbrPerLine = parseInt(this.evaluateFormula(params.NbrCharactersPerLine));
+        var PrinterName = this.evaluateFormula(params.PrinterName);
+        var Commands = this.evaluateFormula(params.Commands);
+        var OutParamaterName = params.OutParamaterName;
+
+        switch (Operation) {
+            case SupportedOperations.GetAllPrinters: {
+
+                if (window.ecsPosPrinter) {
+                    var printers = window.ecsPosPrinter.GetAllPrinters();
+
+                    var array = printers.split(',');
+
+                    HAC_ReturnToParam(OutParamaterName, array);
+                } else {
+                    alert(ERROR_NOT_RUN_IN_HAC);
+                }
+
+                break;
+            }
+            case SupportedOperations.Print: {
+
+                if (window.ecsPosPrinter) {
+                    var value = window.ecsPosPrinter.Print(PrinterName, DPI, Width, NbrPerLine, Commands);
+                    HAC_ReturnToParam(OutParamaterName, value);
+                } else {
+                    alert(ERROR_NOT_RUN_IN_HAC);
+                }
+
+                break;
+            }
+
+        }
+    };
+
+    var SupportedOperations = {
+        GetAllPrinters: 0,
+        Print: 1
+    }
+
+    return EcsPosPrinter_All_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.EcsPosPrinter_All, AndroidPDACommand", EcsPosPrinter_All_Command);

@@ -13,16 +13,17 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Kv.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(400)]
-    public class Retrieve_LocalKv2 : Command, ISubListCommand, IContainSubCommands
+    public class Retrieve_LocalKv2 : Command
     {
         [FormulaProperty(true)]
         [DisplayName("键（大小写敏感）")]
         [SearchableProperty]
         public object KeyString { get; set; }
 
+        [OrderWeight(999)]
+        [DisplayName("将结果返回到变量")]
         [ResultToProperty]
-        [Browsable(false)]
-        public string SubParam_LocalValue { get; set; } = "LocalValue";
+        public string OutParamaterName { get; set; }
 
         public override string ToString()
         {
@@ -39,14 +40,6 @@ namespace AndroidPDACommand
         public override CommandScope GetCommandScope()
         {
             return CommandScope.All;
-        }
-
-        [Browsable(false)]
-        public List<Command> CommandList { get; set; } = new List<Command>();
-
-        public IEnumerable<List<Command>> EnumSubCommands()
-        {
-            yield return CommandList;
         }
     }
 }
