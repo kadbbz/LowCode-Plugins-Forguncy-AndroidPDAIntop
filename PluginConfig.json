@@ -12,8 +12,8 @@
   "name": "PDA（Android）交互命令",
   "pluginType": "command",
   "guid": "{16B8DF69-1379-41C1-9194-BE89BAF8BB32}",
-  "version": "1.8.0.0",
-  "dependenceVersion": "8.0.102.0",
+  "version": "1.8.1.0",
+  "dependenceVersion": "8.0.0.0",
   "bundleJavaScript": true,
   "bundleCSS": true
 }

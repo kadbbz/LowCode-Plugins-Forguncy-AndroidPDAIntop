@@ -1,6 +1,14 @@
 ﻿
 var ERROR_NOT_RUN_IN_HAC = "当前APP不支持该命令，这通常是因为APP版本过低。您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ";
 
+var HAC_GenerateCellInfo = function (context, formula) {
+    var cellLocation = context.getCellLocation(formula);
+    if (window.parent) {
+        cellLocation.iFrameName = window.name;
+    }
+    return JSON.stringify(cellLocation);
+};
+
 var Android_PDA_Broadcast_Mode_Scan_Command = (function (_super) {
     __extends(Android_PDA_Broadcast_Mode_Scan_Command, _super);
     function Android_PDA_Broadcast_Mode_Scan_Command() {
@@ -12,8 +20,8 @@ var Android_PDA_Broadcast_Mode_Scan_Command = (function (_super) {
         // Get setings
         var param = this.CommandParam;
         var targetCellFormula = param.TargetCell;
-        var cellLocation = this.getCellLocation(targetCellFormula);
-        var cellInfo = JSON.stringify(cellLocation);
+        var cellInfo = HAC_GenerateCellInfo(this, targetCellFormula);
+
         var isModal = this.evaluateFormula(param.IsModalMode);
 
         if (window.pda) {
@@ -49,12 +57,10 @@ var Android_PDA_App_Info_Command = (function (_super) {
         //// Get setings
         var param = this.CommandParam;
         var targetCellFormulaV = param.TargetCellVersion;
-        var cellLocationV = this.getCellLocation(targetCellFormulaV);
-        var cellInfoV = JSON.stringify(cellLocationV);
+        var cellInfoV = HAC_GenerateCellInfo(this, targetCellFormulaV);
 
         var targetCellFormulaP = param.TargetCellPackage;
-        var cellLocationP = this.getCellLocation(targetCellFormulaP);
-        var cellInfoP = JSON.stringify(cellLocationP);
+        var cellInfoP = HAC_GenerateCellInfo(this, targetCellFormulaP);
 
         if (window.app) {
             window.app.getVersion(cellInfoV);
@@ -85,8 +91,7 @@ var Android_PDA_CScan_Start_Command = (function (_super) {
         // Get setings
         var param = this.CommandParam;
         var targetCellFormula = param.TargetCell;
-        var cellLocation = this.getCellLocation(targetCellFormula);
-        var cellInfo = JSON.stringify(cellLocation);
+        var cellInfo = HAC_GenerateCellInfo(this, targetCellFormula);
 
         if (window.pda) {
             window.pda.continuous_scan(cellInfo, 0);
@@ -168,9 +173,7 @@ var Get_ActionBar_Color_Command = (function (_super) {
         //// Get setings
         var param = this.CommandParam;
         var targetCellFormulaV = param.TargetCell;
-        var cellLocationV = this.getCellLocation(targetCellFormulaV);
-        var cellInfoV = JSON.stringify(cellLocationV);
-
+        var cellInfoV = HAC_GenerateCellInfo(this, targetCellFormulaV);
         if (window.app) {
             window.app.getActionBarColor(cellInfoV);
 
@@ -202,16 +205,13 @@ var Get_Location_Command = (function (_super) {
         var cs = this.evaluateFormula(param.CS);
 
         var latCellFormulaV = param.LatCell;
-        var latCellV = this.getCellLocation(latCellFormulaV);
-        var latCell = JSON.stringify(latCellV);
+        var latCell = HAC_GenerateCellInfo(this, latCellFormulaV);
 
         var lonCellFormulaV = param.LonCell;
-        var lonCellV = this.getCellLocation(lonCellFormulaV);
-        var lonCell = JSON.stringify(lonCellV);
+        var lonCell = HAC_GenerateCellInfo(this, lonCellFormulaV);
 
         var errCellFormulaV = param.ErrCell;
-        var errCellV = this.getCellLocation(errCellFormulaV);
-        var errCell = JSON.stringify(errCellV);
+        var errCell = HAC_GenerateCellInfo(this, errCellFormulaV);
 
         if (window.geo) {
             window.geo.getLocation(cs, latCell, lonCell, errCell);
@@ -433,8 +433,7 @@ var Retrieve_LocalKv_Command = (function (_super) {
         var param = this.CommandParam;
         var key = this.evaluateFormula(param.KeyString);
         var targetCellFormulaV = param.TargetCell;
-        var cellLocationV = this.getCellLocation(targetCellFormulaV);
-        var cellInfoV = JSON.stringify(cellLocationV);
+        var cellInfoV = HAC_GenerateCellInfo(this, targetCellFormulaV);
 
         if (window.localKv) {
             window.localKv.retrieve(key, cellInfoV);
@@ -1000,14 +999,14 @@ var NfcReader_Command = (function (_super) {
 
     NfcReader_Command.prototype.execute = function () {
         var params = this.CommandParam;
-  
-        var TagCell = JSON.stringify(this.getCellLocation(params.TagCell));
+
+        var TagCell = HAC_GenerateCellInfo(this, params.TagCell);
 
         if (window.nfc) {
             window.nfc.readTagId(TagCell);
         } else {
             alert(ERROR_NOT_RUN_IN_HAC);
-        }       
+        }
     };
 
     return NfcReader_Command;
