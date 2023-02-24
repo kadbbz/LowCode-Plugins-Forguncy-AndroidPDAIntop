@@ -31,7 +31,7 @@ namespace AndroidPDACommand
             return CommandScope.ClientSide;
         }
         [FormulaProperty(true)]
-        [DisplayName("目标单元格（TAG ID，16进制）")]
+        [DisplayName("目标单元格（TAG ID，字符串）")]
         public object TagCell { get; set; }
 
     }
