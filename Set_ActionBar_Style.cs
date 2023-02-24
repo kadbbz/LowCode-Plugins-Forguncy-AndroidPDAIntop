@@ -16,23 +16,23 @@ namespace AndroidPDACommand
     public class Set_ActionBar_Style : Command, IPropertySearchable, IForceGenerateCell
     {
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("是否显示状态栏（ActionBar）")]
         public IFormulaReferObject ShouldShowActionBar { get; set; }
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("状态栏颜色（格式为FFFFFF，RGB）")]
         public object ActionBarColor { get; set; }
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("菜单：是否显示【配置】")]
         public IFormulaReferObject ShouldShowSettings { get; set; }
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("菜单：【帮助】页面（留空表示隐藏该菜单）")]
         public IFormulaReferObject HelpUrl { get; set; }
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("菜单：【关于】页面（留空表示隐藏该菜单）")]
         public IFormulaReferObject AboutUrl { get; set; }
 

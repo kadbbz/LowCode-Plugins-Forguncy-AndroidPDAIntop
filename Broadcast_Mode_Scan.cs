@@ -19,7 +19,7 @@ namespace AndroidPDACommand
         [DisplayName("目标单元格")]
         public object TargetCell { get; set; }
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("是否为模态（弹出应用内置的扫码等待页面）")]
         public object IsModalMode { get; set; }
 

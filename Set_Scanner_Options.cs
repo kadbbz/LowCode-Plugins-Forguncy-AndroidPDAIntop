@@ -15,11 +15,11 @@ namespace AndroidPDACommand
     [OrderWeight(805)]
     public class Set_Scanner_Options : Command, IPropertySearchable, IForceGenerateCell
     {
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("广播名称（Action）")]
         public IFormulaReferObject Action { get; set; }
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("广播键值（Extra）")]
         public IFormulaReferObject Extra { get; set; }
 

@@ -17,15 +17,15 @@ namespace AndroidPDACommand
     {
 
      
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("菜单：是否显示【配置】")]
         public IFormulaReferObject ShouldShowSettings { get; set; }
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("菜单：【帮助】页面（留空表示隐藏该菜单）")]
         public IFormulaReferObject HelpUrl { get; set; }
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("菜单：【关于】页面（留空表示隐藏该菜单）")]
         public IFormulaReferObject AboutUrl { get; set; }
 

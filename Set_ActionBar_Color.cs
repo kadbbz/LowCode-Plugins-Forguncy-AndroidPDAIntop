@@ -15,7 +15,7 @@ namespace AndroidPDACommand
     [OrderWeight(810)]
     public class Set_ActionBar_Color : Command, IPropertySearchable, IForceGenerateCell
     {
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("颜色（格式为FFFFFF，RGB）")]
         public object ColorString { get; set; }
 

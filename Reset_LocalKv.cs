@@ -15,7 +15,7 @@ namespace AndroidPDACommand
     [OrderWeight(402)]
     public class Reset_LocalKv : Command, IPropertySearchable, IForceGenerateCell
     {
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("键（大小写敏感）")]
         public object KeyString { get; set; }
 

@@ -15,11 +15,11 @@ namespace AndroidPDACommand
     [OrderWeight(401)]
     public class Upsert_LocalKv : Command, IPropertySearchable, IForceGenerateCell
     {
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("键（大小写敏感）")]
         public object KeyString { get; set; }
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("值")]
         public object ValueString { get; set; }
 

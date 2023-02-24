@@ -15,7 +15,7 @@ namespace AndroidPDACommand
     [OrderWeight(400)]
     public class Retrieve_LocalKv2 : Command
     {
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("键（大小写敏感）")]
         [SearchableProperty]
         public object KeyString { get; set; }

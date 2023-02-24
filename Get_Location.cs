@@ -16,7 +16,7 @@ namespace AndroidPDACommand
     public class Get_Location : Command, IPropertySearchable, IForceGenerateCell
     {
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("坐标体系：支持WGS84、GCJ02、BD09")]
         public object CS { get; set; }
 

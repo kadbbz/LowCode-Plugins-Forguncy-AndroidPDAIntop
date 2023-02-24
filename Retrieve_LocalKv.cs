@@ -19,7 +19,7 @@ namespace AndroidPDACommand
         [DisplayName("目标单元格")]
         public object TargetCell { get; set; }
 
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("键（大小写敏感）")]
         public object KeyString { get; set; }
 
