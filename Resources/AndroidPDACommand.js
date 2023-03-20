@@ -392,6 +392,58 @@ var BuiltinPage = {
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Open_Builtin_Activity, AndroidPDACommand", Open_Builtin_Activity_Command);
 
+var CloseApp_Command = (function (_super) {
+    __extends(CloseApp_Command, _super);
+    function CloseApp_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    CloseApp_Command.prototype.execute = function () {
+
+        //// Get setings
+        var param = this.CommandParam;
+
+        if (window.app && window.app.closeApp) {
+            window.app.closeApp();
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return CloseApp_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.CloseApp, AndroidPDACommand", CloseApp_Command);
+
+var PDFPreview_Command = (function (_super) {
+    __extends(PDFPreview_Command, _super);
+    function PDFPreview_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    PDFPreview_Command.prototype.execute = function () {
+
+        // Get setings
+        var param = this.CommandParam;
+        var url = this.evaluateFormula(param.Url);
+        var name = this.evaluateFormula(param.FileName);
+        var pwd = this.evaluateFormula(param.Password);
+
+        if (window.pdf) {
+            window.pdf.preview(url, name, pwd);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return PDFPreview_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.PDFPreview, AndroidPDACommand", PDFPreview_Command);
 
 var Upsert_LocalKv_Command = (function (_super) {
     __extends(Upsert_LocalKv_Command, _super);

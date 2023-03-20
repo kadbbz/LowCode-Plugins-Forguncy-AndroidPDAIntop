@@ -65,6 +65,8 @@
     <Compile Include="DothanPrinter_DrawContent.cs" />
     <Compile Include="DothanPrinter_Job.cs" />
     <Compile Include="NfcReader.cs" />
+    <Compile Include="CloseApp.cs" />
+    <Compile Include="PDFPreview.cs" />
     <Compile Include="Retrieve_LocalKv2.cs" />
     <Compile Include="Retrieve_LocalKv.cs" />
     <Compile Include="Get_Location.cs" />
@@ -122,6 +124,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icon_Nfc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icon_PDF.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
