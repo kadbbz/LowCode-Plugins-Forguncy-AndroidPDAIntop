@@ -1066,3 +1066,29 @@ var NfcReader_Command = (function (_super) {
 
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.NfcReader, AndroidPDACommand", NfcReader_Command);
+
+var Device_Info_Command = (function (_super) {
+    __extends(Device_Info_Command, _super);
+    function Device_Info_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Device_Info_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var pName = params.OutParamaterName;
+
+        if (window.device) {
+            var value = window.device.getSecureId();
+
+            HAC_ReturnToParam(pName, value);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_ReturnToParam(pName, "");
+        }
+    };
+
+    return Device_Info_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Device_Info, AndroidPDACommand", Device_Info_Command);

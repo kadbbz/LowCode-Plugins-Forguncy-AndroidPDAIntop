@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Device_Info.cs" />
     <Compile Include="DothanPrinter_Device.cs" />
     <Compile Include="DothanPrinter_DrawShape.cs" />
     <Compile Include="DothanPrinter_DrawContent.cs" />
