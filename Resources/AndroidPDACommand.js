@@ -133,6 +133,32 @@ var Android_PDA_CScan_Stop_Command = (function (_super) {
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Broadcast_Mode_ContinuousScanStop, AndroidPDACommand", Android_PDA_CScan_Stop_Command);
 
+var DialPhone_Command = (function (_super) {
+    __extends(DialPhone_Command, _super);
+    function DialPhone_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    DialPhone_Command.prototype.execute = function () {
+
+        // Get setings
+        var param = this.CommandParam;
+        var phone = this.evaluateFormula(param.PhoneNumber);
+
+        if (window.app && window.app.dial) {
+            window.app.dial(phone);
+            console.log("拨打电话：" + phone);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return DialPhone_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DialPhone, AndroidPDACommand", DialPhone_Command);
 
 var Set_ActionBar_Color_Command = (function (_super) {
     __extends(Set_ActionBar_Color_Command, _super);
