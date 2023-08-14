@@ -18,7 +18,7 @@ namespace AndroidPDACommand
 
         [FormulaProperty]
         [DisplayName("是否显示状态栏（ActionBar）")]
-        public IFormulaReferObject ShouldShowActionBar { get; set; }
+        public object ShouldShowActionBar { get; set; }
 
         [FormulaProperty]
         [DisplayName("状态栏颜色（格式为FFFFFF，RGB）")]
@@ -26,15 +26,15 @@ namespace AndroidPDACommand
 
         [FormulaProperty]
         [DisplayName("菜单：是否显示【配置】")]
-        public IFormulaReferObject ShouldShowSettings { get; set; }
+        public object ShouldShowSettings { get; set; }
 
         [FormulaProperty]
         [DisplayName("菜单：【帮助】页面（留空表示隐藏该菜单）")]
-        public IFormulaReferObject HelpUrl { get; set; }
+        public object HelpUrl { get; set; }
 
         [FormulaProperty]
         [DisplayName("菜单：【关于】页面（留空表示隐藏该菜单）")]
-        public IFormulaReferObject AboutUrl { get; set; }
+        public object AboutUrl { get; set; }
 
         public override string ToString()
         {

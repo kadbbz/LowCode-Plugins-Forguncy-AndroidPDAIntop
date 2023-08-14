@@ -17,11 +17,11 @@ namespace AndroidPDACommand
     {
         [FormulaProperty]
         [DisplayName("广播名称（Action）")]
-        public IFormulaReferObject Action { get; set; }
+        public object Action { get; set; }
 
         [FormulaProperty]
         [DisplayName("广播键值（Extra）")]
-        public IFormulaReferObject Extra { get; set; }
+        public object Extra { get; set; }
 
        
         public override string ToString()
