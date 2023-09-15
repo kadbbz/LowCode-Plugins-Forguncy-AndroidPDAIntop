@@ -145,6 +145,8 @@ var DialPhone_Command = (function (_super) {
         var param = this.CommandParam;
         var phone = this.evaluateFormula(param.PhoneNumber);
 
+        phone = phone + "";
+
         if (window.app && window.app.dial) {
             window.app.dial(phone);
             console.log("拨打电话：" + phone);
