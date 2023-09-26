@@ -49,8 +49,20 @@
     <Reference Include="GrapeCity.Forguncy.Plugin">
       <HintPath>C:\Program Files\Forguncy 8\Website\designerBin\GrapeCity.Forguncy.Plugin.dll</HintPath>
     </Reference>
+    <Reference Include="GrapeCity.Forguncy.ServerApi, Version=8.0.105.0, Culture=neutral, PublicKeyToken=967100671921c115, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Forguncy 8\Website\bin\GrapeCity.Forguncy.ServerApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Jiguang.JPush, Version=1.2.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Jiguang.JPush.1.2.5\lib\net45\Jiguang.JPush.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Threading" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -60,6 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JPush_Info.cs" />
+    <Compile Include="JPushServerCommand.cs" />
     <Compile Include="Device_Info.cs" />
     <Compile Include="DothanPrinter_Device.cs" />
     <Compile Include="DothanPrinter_DrawShape.cs" />
@@ -87,6 +101,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Resources\AndroidPDACommand.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

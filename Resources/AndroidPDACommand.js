@@ -1095,6 +1095,33 @@ var NfcReader_Command = (function (_super) {
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.NfcReader, AndroidPDACommand", NfcReader_Command);
 
+var JPush_Info_Command = (function (_super) {
+    __extends(JPush_Info_Command, _super);
+    function JPush_Info_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    JPush_Info_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var pName = params.OutParamaterName;
+
+        if (window.jpush) {
+            var value = window.jpush.getRegistrationID();
+
+            HAC_ReturnToParam(pName, value);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_ReturnToParam(pName, "");
+        }
+    };
+
+    return JPush_Info_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.JPush_Info, AndroidPDACommand", JPush_Info_Command);
+
+
 var Device_Info_Command = (function (_super) {
     __extends(Device_Info_Command, _super);
     function Device_Info_Command() {
