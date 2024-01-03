@@ -53,6 +53,10 @@ namespace AndroidPDACommand
         public object TargetCell { get; set; }
 
         [FormulaProperty(true)]
+        [DisplayName("目标单元格：数据（整数数组）")]
+        public object TargetRawCell { get; set; }
+
+        [FormulaProperty(true)]
         [DisplayName("目标单元格：错误信息")]
         public object ErrorCell { get; set; }
 

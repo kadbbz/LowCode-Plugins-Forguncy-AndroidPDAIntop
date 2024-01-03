@@ -1189,20 +1189,21 @@ var BLE_Read_Command = (function (_super) {
         var Mode = params.Mode;
 
         var TargetCell = HAC_GenerateCellInfo(this, params.TargetCell);
+        var TargetRawCell = HAC_GenerateCellInfo(this, params.TargetRawCell);
         var ErrorCell = HAC_GenerateCellInfo(this, params.ErrorCell);
 
         if (window.ble) {
             switch (Mode) {
                 case SupportedReadMode.Read: {
-                    window.ble.read(MAC, Service, Character, TargetCell, ErrorCell);
+                    window.ble.read(MAC, Service, Character, TargetCell, TargetRawCell, ErrorCell);
                     break;
                 }
                 case SupportedReadMode.Notify: {
-                    window.ble.notify(MAC, Service, Character, TargetCell, ErrorCell);
+                    window.ble.notify(MAC, Service, Character, TargetCell, TargetRawCell, ErrorCell);
                     break;
                 }
                 case SupportedReadMode.Indicate: {
-                    window.ble.indicate(MAC, Service, Character, TargetCell, ErrorCell);
+                    window.ble.indicate(MAC, Service, Character, TargetCell, TargetRawCell, ErrorCell);
                     break;
                 }
             }
