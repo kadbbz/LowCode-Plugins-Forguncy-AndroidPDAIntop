@@ -41,11 +41,11 @@ namespace AndroidPDACommand
         public object ServiceUUID { get; set; }
 
         [FormulaProperty(false)]
-        [DisplayName("特征（4位数字，如1200）")]
+        [DisplayName("特征（4位数字，如2A25）")]
         public object CharacteristicUUID { get; set; }
 
-        [FormulaProperty(true)]
-        [DisplayName("数据（BASE64加密）")]
+        [FormulaProperty(false)]
+        [DisplayName("数据（BASE64加密，或0x开头的十六进制）")]
         public object DataCell { get; set; }
 
         [FormulaProperty(true)]
