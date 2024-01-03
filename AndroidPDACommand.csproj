@@ -72,6 +72,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLE_Write.cs" />
+    <Compile Include="BLE_Read.cs" />
+    <Compile Include="BLE_Scan.cs" />
     <Compile Include="JPush_Info.cs" />
     <Compile Include="JPushServerCommand.cs" />
     <Compile Include="Device_Info.cs" />
@@ -145,6 +148,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icon_PDF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icon_Bluetooth.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

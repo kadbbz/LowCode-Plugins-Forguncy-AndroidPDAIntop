@@ -1147,3 +1147,107 @@ var Device_Info_Command = (function (_super) {
 
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Device_Info, AndroidPDACommand", Device_Info_Command);
+
+
+var BLE_Scan_Command = (function (_super) {
+    __extends(BLE_Scan_Command, _super);
+    function BLE_Scan_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    BLE_Scan_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+
+        var TargetCell = HAC_GenerateCellInfo(this, params.TargetCell);
+        var ErrorCell = HAC_GenerateCellInfo(this, params.ErrorCell);
+
+        if (window.ble) {
+            window.ble.scan(TargetCell, ErrorCell);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return BLE_Scan_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Scan, AndroidPDACommand", BLE_Scan_Command);
+
+var BLE_Read_Command = (function (_super) {
+    __extends(BLE_Read_Command, _super);
+    function BLE_Read_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    BLE_Read_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var MAC = this.evaluateFormula(params.MacAddress);
+        var Service = this.evaluateFormula(params.ServiceUUID);
+        var Character = this.evaluateFormula(params.CharacteristicUUID);
+
+        var Mode = params.Mode;
+
+        var TargetCell = HAC_GenerateCellInfo(this, params.TargetCell);
+        var ErrorCell = HAC_GenerateCellInfo(this, params.ErrorCell);
+
+        if (window.ble) {
+            switch (Mode) {
+                case SupportedReadMode.Read: {
+                    window.ble.read(MAC, Service, Character, TargetCell, ErrorCell);
+                    break;
+                }
+                case SupportedReadMode.Notify: {
+                    window.ble.notify(MAC, Service, Character, TargetCell, ErrorCell);
+                    break;
+                }
+                case SupportedReadMode.Indicate: {
+                    window.ble.indicate(MAC, Service, Character, TargetCell, ErrorCell);
+                    break;
+                }
+            }
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    var SupportedReadMode = {
+        Read: 0,
+        Notify: 1,
+        Indicate: 2
+    }
+
+    return BLE_Read_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Read, AndroidPDACommand", BLE_Read_Command);
+
+var BLE_Write_Command = (function (_super) {
+    __extends(BLE_Write_Command, _super);
+    function BLE_Write_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    BLE_Write_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var MAC = this.evaluateFormula(params.MacAddress);
+        var Service = this.evaluateFormula(params.ServiceUUID);
+        var Character = this.evaluateFormula(params.CharacteristicUUID);
+        var Data = this.evaluateFormula(params.DataCell);
+
+        var ErrorCell = HAC_GenerateCellInfo(this, params.ErrorCell);
+
+        if (window.ble) {
+            window.ble.write(MAC, Service, Character, Data, ErrorCell);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return BLE_Write_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Write, AndroidPDACommand", BLE_Write_Command);
