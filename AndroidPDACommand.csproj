@@ -72,6 +72,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="File_Add_Watermark.cs" />
+    <Compile Include="File_Load_Base64.cs" />
+    <Compile Include="Camera_Take_Video.cs" />
+    <Compile Include="Camera_Take_Photo.cs" />
     <Compile Include="BLE_Write.cs" />
     <Compile Include="BLE_Read.cs" />
     <Compile Include="BLE_Scan.cs" />
@@ -95,6 +99,7 @@
     <Compile Include="Open_Builtin_Activity.cs" />
     <Compile Include="Reset_LocalKv.cs" />
     <Compile Include="DialPhoneCommand.cs" />
+    <Compile Include="Set_Offline_Mode.cs" />
     <Compile Include="Upsert_LocalKv.cs" />
     <Compile Include="Set_Option_Menu.cs" />
     <Compile Include="Set_Scanner_Options.cs" />
@@ -151,6 +156,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icon_Bluetooth.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icon_Camera.png" />
+    <Resource Include="Resources\Icon_File.png" />
+    <Resource Include="Resources\Icon_Image.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

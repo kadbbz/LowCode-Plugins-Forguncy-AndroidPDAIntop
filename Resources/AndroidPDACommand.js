@@ -1252,3 +1252,135 @@ var BLE_Write_Command = (function (_super) {
 
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Write, AndroidPDACommand", BLE_Write_Command);
+
+var Camera_Take_Photo_Command = (function (_super) {
+    __extends(Camera_Take_Photo_Command, _super);
+    function Camera_Take_Photo_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Camera_Take_Photo_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var isSnapshot = this.evaluateFormula(params.IsSnapshot);
+        var TargetCell = HAC_GenerateCellInfo(this, params.TargetCell);
+
+        if (window.camera) {
+            window.camera.takePhoto(isSnapshot, TargetCell);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return Camera_Take_Photo_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Camera_Take_Photo, AndroidPDACommand", Camera_Take_Photo_Command);
+
+var Camera_Take_Video_Command = (function (_super) {
+    __extends(Camera_Take_Video_Command, _super);
+    function Camera_Take_Video_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Camera_Take_Video_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var isSnapshot = this.evaluateFormula(params.IsSnapshot);
+        var TargetCell = HAC_GenerateCellInfo(this, params.TargetCell);
+
+        if (window.camera) {
+            window.camera.takeVideo(isSnapshot, TargetCell);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return Camera_Take_Video_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Camera_Take_Video, AndroidPDACommand", Camera_Take_Video_Command);
+
+var File_Load_Base64_Command = (function (_super) {
+    __extends(File_Load_Base64_Command, _super);
+    function File_Load_Base64_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    File_Load_Base64_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var FileUri = this.evaluateFormula(params.FileUri);
+        var pName = params.PName;
+
+        if (window.hac_file) {
+
+            var objUrl;
+
+            if (FileUri && FileUri.length) {
+                objUrl = window.hac_file.loadFile(FileUri);
+            } else {
+                objUrl = window.hac_file.loadLatestFile();
+            }
+
+            HAC_ReturnToParam(pName, objUrl);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return File_Load_Base64_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.File_Load_Base64, AndroidPDACommand", File_Load_Base64_Command);
+
+var File_Add_Watermark_Command = (function (_super) {
+    __extends(File_Add_Watermark_Command, _super);
+    function File_Add_Watermark_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    File_Add_Watermark_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var FileUri = this.evaluateFormula(params.FileUri);
+        var WMText = this.evaluateFormula(params.WMText);
+        var WMColor = this.evaluateFormula(params.WMColor);
+        var WMTileMode = params.WMTileMode;
+
+        var TargetCell = HAC_GenerateCellInfo(this, params.TargetCell);
+
+        if (window.hac_file) {
+            window.hac_file.drawWatermarkForImage(FileUri, WMText, WMTileMode, WMColor, TargetCell);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return File_Add_Watermark_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.File_Add_Watermark, AndroidPDACommand", File_Add_Watermark_Command);
+
+var Set_Offline_Mode_Command = (function (_super) {
+    __extends(Set_Offline_Mode_Command, _super);
+    function Set_Offline_Mode_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Set_Offline_Mode_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var IsOfflineMode = params.IsOfflineMode;
+        
+        if (window.app) {
+            window.app.toggleOfflineMode(IsOfflineMode);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return Set_Offline_Mode_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Offline_Mode, AndroidPDACommand", Set_Offline_Mode_Command);
