@@ -7,27 +7,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static AndroidPDACommand.BLE_Read;
 
 namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Phone.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(910)]
-    public class DialPhone : Command
+    [OrderWeight(895)]
+    public class Vibrate : Command
     {
-        [FormulaProperty(false)]
-        [SearchableProperty]
-        [DisplayName("电话号码")]
-        public object PhoneNumber { get; set; }
-
         public override string ToString()
         {
-            return "拨打电话";
+            return "震动提醒";
         }
+
+        [FormulaProperty(false)]
+        [SearchableProperty]
+        [DisplayName("持续时间（秒）")]
+        public object Duration { get; set; } = 1.0;
 
         public override CommandScope GetCommandScope()
         {
-            return CommandScope.All;
+            return CommandScope.ClientSide;
         }
+
     }
+
 }

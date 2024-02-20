@@ -72,6 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StartVibrate.cs" />
+    <Compile Include="PlayRingtone.cs" />
     <Compile Include="File_Add_Watermark.cs" />
     <Compile Include="File_Load_Base64.cs" />
     <Compile Include="Camera_Take_Video.cs" />

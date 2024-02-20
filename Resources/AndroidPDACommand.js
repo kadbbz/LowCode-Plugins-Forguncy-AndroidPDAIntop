@@ -1384,3 +1384,68 @@ var Set_Offline_Mode_Command = (function (_super) {
 
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Offline_Mode, AndroidPDACommand", Set_Offline_Mode_Command);
+
+var Vibrate_Command = (function (_super) {
+    __extends(Vibrate_Command, _super);
+    function Vibrate_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Vibrate_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var duration = this.evaluateFormula(params.Duration);
+
+        if (window.app) {
+            window.app.vibrate(duration);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return Vibrate_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Vibrate, AndroidPDACommand", Vibrate_Command);
+
+var Play_Ringtone_Command = (function (_super) {
+    __extends(Play_Ringtone_Command, _super);
+    function Play_Ringtone_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Play_Ringtone_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var type = params.Type;
+
+        if (window.app) {
+            switch (type) {
+                case SupportedRingtoneType.Alarm: {
+                    window.app.playAlarm();
+                    break;
+                }
+                case SupportedRingtoneType.Notification: {
+                    window.app.playNotification();
+                    break;
+                }
+                case SupportedRingtoneType.Ringtone: {
+                    window.app.playRingtone();
+                    break;
+                }
+            }
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    var SupportedRingtoneType = {
+        Notification: 0,
+        Alarm: 1,
+        Ringtone: 2
+    }
+
+    return Play_Ringtone_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.PlayRingtone, AndroidPDACommand", Play_Ringtone_Command);
