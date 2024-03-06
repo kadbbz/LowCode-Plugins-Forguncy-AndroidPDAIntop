@@ -3,6 +3,11 @@ var ERROR_NOT_RUN_IN_HAC = "当前APP不支持该命令，这通常是因为APP�
 
 var HAC_GenerateCellInfo = function (context, formula) {
     var cellLocation = context.getCellLocation(formula);
+
+    if (!cellLocation) {
+        return null;
+    }
+
     if (window.parent) {
         cellLocation.iFrameName = window.name;
     }
@@ -1186,28 +1191,12 @@ var BLE_Read_Command = (function (_super) {
         var Service = this.evaluateFormula(params.ServiceUUID);
         var Character = this.evaluateFormula(params.CharacteristicUUID);
 
-        var Mode = params.Mode;
-
         var TargetCell = HAC_GenerateCellInfo(this, params.TargetCell);
         var TargetRawCell = HAC_GenerateCellInfo(this, params.TargetRawCell);
         var ErrorCell = HAC_GenerateCellInfo(this, params.ErrorCell);
 
         if (window.ble) {
-            switch (Mode) {
-                case SupportedReadMode.Read: {
-                    window.ble.read(MAC, Service, Character, TargetCell, TargetRawCell, ErrorCell);
-                    break;
-                }
-                case SupportedReadMode.Notify: {
-                    window.ble.notify(MAC, Service, Character, TargetCell, TargetRawCell, ErrorCell);
-                    break;
-                }
-                case SupportedReadMode.Indicate: {
-                    window.ble.indicate(MAC, Service, Character, TargetCell, TargetRawCell, ErrorCell);
-                    break;
-                }
-            }
-
+            window.ble.read(MAC, Service, Character, TargetCell, TargetRawCell, ErrorCell);
         } else {
             alert(ERROR_NOT_RUN_IN_HAC);
         }
@@ -1224,6 +1213,94 @@ var BLE_Read_Command = (function (_super) {
 
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Read, AndroidPDACommand", BLE_Read_Command);
+
+var BLE_Register_Command = (function (_super) {
+    __extends(BLE_Register_Command, _super);
+    function BLE_Register_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    BLE_Register_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var MAC = this.evaluateFormula(params.MacAddress);
+        var Service = this.evaluateFormula(params.ServiceUUID);
+        var Character = this.evaluateFormula(params.CharacteristicUUID);
+
+        var Mode = params.Mode;
+
+        var TargetCell = HAC_GenerateCellInfo(this, params.TargetCell);
+        var TargetRawCell = HAC_GenerateCellInfo(this, params.TargetRawCell);
+        var ErrorCell = HAC_GenerateCellInfo(this, params.ErrorCell);
+
+        if (window.ble) {
+            switch (Mode) {
+                case SupportedReadMode.Notify: {
+                    window.ble.notify(MAC, Service, Character, TargetCell, TargetRawCell, ErrorCell);
+                    break;
+                }
+                case SupportedReadMode.Indicate: {
+                    window.ble.indicate(MAC, Service, Character, TargetCell, TargetRawCell, ErrorCell);
+                    break;
+                }
+            }
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    var SupportedReadMode = {
+        Notify: 0,
+        Indicate: 1
+    }
+
+    return BLE_Register_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Register, AndroidPDACommand", BLE_Register_Command);
+
+var BLE_Unregister_Command = (function (_super) {
+    __extends(BLE_Unregister_Command, _super);
+    function BLE_Unregister_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    BLE_Unregister_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var MAC = this.evaluateFormula(params.MacAddress);
+        var Service = this.evaluateFormula(params.ServiceUUID);
+        var Character = this.evaluateFormula(params.CharacteristicUUID);
+
+        var Mode = params.Mode;
+
+        if (window.ble) {
+            switch (Mode) {
+                case SupportedReadMode.Notify: {
+                    window.ble.unregisterNotify(MAC, Service, Character);
+                    break;
+                }
+                case SupportedReadMode.Indicate: {
+                    window.ble.unregisterIndicate(MAC, Service, Character);
+                    break;
+                }
+            }
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    var SupportedReadMode = {
+        Notify: 0,
+        Indicate: 1
+    }
+
+    return BLE_Unregister_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Unregister, AndroidPDACommand", BLE_Unregister_Command);
 
 var BLE_Write_Command = (function (_super) {
     __extends(BLE_Write_Command, _super);
@@ -1371,7 +1448,7 @@ var Set_Offline_Mode_Command = (function (_super) {
     Set_Offline_Mode_Command.prototype.execute = function () {
         var params = this.CommandParam;
         var IsOfflineMode = params.IsOfflineMode;
-        
+
         if (window.app) {
             window.app.toggleOfflineMode(IsOfflineMode);
         } else {
