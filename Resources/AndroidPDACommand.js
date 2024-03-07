@@ -1260,13 +1260,13 @@ var BLE_Register_Command = (function (_super) {
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Register, AndroidPDACommand", BLE_Register_Command);
 
-var BLE_Unregister_Command = (function (_super) {
-    __extends(BLE_Unregister_Command, _super);
-    function BLE_Unregister_Command() {
+var BLE_UR_Command = (function (_super) {
+    __extends(BLE_UR_Command, _super);
+    function BLE_UR_Command() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
 
-    BLE_Unregister_Command.prototype.execute = function () {
+    BLE_UR_Command.prototype.execute = function () {
         var params = this.CommandParam;
         var MAC = this.evaluateFormula(params.MacAddress);
         var Service = this.evaluateFormula(params.ServiceUUID);
@@ -1296,11 +1296,11 @@ var BLE_Unregister_Command = (function (_super) {
         Indicate: 1
     }
 
-    return BLE_Unregister_Command;
+    return BLE_UR_Command;
 }(Forguncy.CommandBase));
 
 
-Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Unregister, AndroidPDACommand", BLE_Unregister_Command);
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Unregister, AndroidPDACommand", BLE_UR_Command);
 
 var BLE_Write_Command = (function (_super) {
     __extends(BLE_Write_Command, _super);
