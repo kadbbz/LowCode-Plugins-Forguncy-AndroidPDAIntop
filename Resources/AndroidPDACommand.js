@@ -1526,3 +1526,55 @@ var Play_Ringtone_Command = (function (_super) {
 
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.PlayRingtone, AndroidPDACommand", Play_Ringtone_Command);
+
+
+var ESCPrinter_Scan_Command = (function (_super) {
+    __extends(ESCPrinter_Scan_Command, _super);
+    function ESCPrinter_Scan_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    ESCPrinter_Scan_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+
+        var TargetCell = HAC_GenerateCellInfo(this, params.TargetCell);
+
+        if (window.escBtPrinter) {
+            window.escBtPrinter.scan(TargetCell);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return ESCPrinter_Scan_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.ESCPrinter_Scan, AndroidPDACommand", ESCPrinter_Scan_Command);
+
+var ESCPrinter_Print_Command = (function (_super) {
+    __extends(ESCPrinter_Print_Command, _super);
+    function ESCPrinter_Print_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    ESCPrinter_Print_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var macAddress = this.evaluateFormula(params.macAddress);
+        var printerWidthMM = parseFloat(this.evaluateFormula(params.printerWidthMM));
+        var printerDpi = parseInt(this.evaluateFormula(params.printerDpi));
+        var printerNbrCharactersPerLine = parseInt(this.evaluateFormula(params.printerNbrCharactersPerLine));
+        var template = this.evaluateFormula(params.template);
+
+        if (window.escBtPrinter) {
+            window.escBtPrinter.print(macAddress, printerDpi, printerWidthMM, printerNbrCharactersPerLine, template);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return ESCPrinter_Print_Command;
+}(Forguncy.CommandBase));
+
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.ESCPrinter_Print, AndroidPDACommand", ESCPrinter_Print_Command);

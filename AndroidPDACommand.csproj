@@ -74,6 +74,8 @@
   <ItemGroup>
     <Compile Include="BLE_Unregister.cs" />
     <Compile Include="BLE_Register.cs" />
+    <Compile Include="ESCPrinter_Print.cs" />
+    <Compile Include="ESCPrinter_Scan.cs" />
     <Compile Include="StartVibrate.cs" />
     <Compile Include="PlayRingtone.cs" />
     <Compile Include="File_Add_Watermark.cs" />
