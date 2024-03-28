@@ -12,21 +12,19 @@ namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Settings.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(805)]
-    public class Set_Scanner_Options : BaseCommand
+    [OrderWeight(811)]
+    public class Get_ActionBar_Color2 : BaseCommand
     {
-        [FormulaProperty]
-        [DisplayName("广播名称（Action）")]
-        public object Action { get; set; }
 
-        [FormulaProperty]
-        [DisplayName("广播键值（Extra）")]
-        public object Extra { get; set; }
-
-       
         public override string ToString()
         {
-            return "配置扫描头参数";
+            return "读取ActionBar颜色";
         }
+
+        [DisplayName("将颜色返回到变量")]
+        [Description("形如：0x1111FF")]
+        [SearchableProperty]
+        [ResultToProperty]
+        public string OutParamaterName { get; set; } = "Color";
     }
 }

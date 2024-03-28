@@ -13,7 +13,7 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Settings.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(801)]
-    public class Set_Option_Menu : Command, IPropertySearchable, IForceGenerateCell
+    public class Set_Option_Menu : BaseCommand
     {
 
      
@@ -32,23 +32,6 @@ namespace AndroidPDACommand
         public override string ToString()
         {
             return "配置APP的菜单";
-        }
-
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.All;
-        }
-
-        public IEnumerable<FindResultItem> EnumSearchableProperty(LocationIndicator location)
-        {
-            List<FindResultItem> result = new List<FindResultItem>();
-            return result;
-        }
-
-        public IEnumerable<GenerateCellInfo> GetForceGenerateCells()
-        {
-            List<GenerateCellInfo> result = new List<GenerateCellInfo>();
-            return result;
         }
     }
 }

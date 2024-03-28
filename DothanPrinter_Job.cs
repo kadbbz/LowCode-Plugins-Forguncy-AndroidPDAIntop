@@ -10,7 +10,7 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Printer.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(301)]
-    public class DothanPrinter_Job : Command
+    public class DothanPrinter_Job : BaseCommand
     {
 
         /// <summary>
@@ -28,16 +28,6 @@ namespace AndroidPDACommand
                 return "管理蓝牙打印任务（DothanTech版）：" + Operation.ToString();
             }
         }
-
-        /// <summary>
-        /// 插件类型：设置为服务端命令插件
-        /// </summary>
-        /// <returns>插件类型枚举</returns>
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.ClientSide;
-        }
-
 
         private bool setPropertyVisiblity(string propertyName, bool W, bool H, bool O, bool Out = true)
         {

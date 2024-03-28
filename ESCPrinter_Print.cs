@@ -10,7 +10,7 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Printer.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(291)]
-    public class ESCPrinter_Print : Command
+    public class ESCPrinter_Print : BaseCommand
     {
 
         /// <summary>
@@ -46,16 +46,7 @@ namespace AndroidPDACommand
         [DisplayName("需打印的文字模板")]
         [Description("了解文字模板的定义规则，请在Github上搜索 DantSu/ESCPOS-ThermalPrinter-Android")]
         [FormulaProperty(false)]
-        public object template { get; set; }
-
-        /// <summary>
-        /// 插件类型：设置为服务端命令插件
-        /// </summary>
-        /// <returns>插件类型枚举</returns>
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.ClientSide;
-        }       
+        public object template { get; set; }      
 
     }
 }

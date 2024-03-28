@@ -9,8 +9,8 @@ namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Bluetooth.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(118)]
-    public class BLE_Unregister : BaseCommand
+    [OrderWeight(117)]
+    public class BLE_Register_Async : BaseAsyncCommand
     {
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace AndroidPDACommand
         /// <returns>易读的字符串</returns>
         public override string ToString()
         {
-            return "取消对BLE设备的订阅"; // 命令列表中默认显示的名称
+            return "向BLE设备订阅数据通知"; // 命令列表中默认显示的名称
         }
 
         [FormulaProperty(false)]
@@ -37,6 +37,15 @@ namespace AndroidPDACommand
         [FormulaProperty(false)]
         [DisplayName("特征（4位数字，如1200）")]
         public object CharacteristicUUID { get; set; }
+
+        [Browsable(false)]
+        [ResultToProperty]
+        public string SubCommandParam1 { get; set; } = "Data_In_BASE64";
+
+        [Browsable(false)]
+        [ResultToProperty]
+        public string SubCommandParam2 { get; set; } = "Data_In_ByteArray";
+
 
         public enum SupportedReadMode {
 

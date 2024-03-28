@@ -9,8 +9,8 @@ namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Bluetooth.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(115)]
-    public class BLE_Read : Command
+    [OrderWeight(1115)]
+    public class BLE_Read : BaseCommand
     {
 
         /// <summary>
@@ -19,18 +19,8 @@ namespace AndroidPDACommand
         /// <returns>易读的字符串</returns>
         public override string ToString()
         {
-            return "从BLE设备读取数据"; // 命令列表中默认显示的名称
+            return "从BLE设备读取数据到单元格"; // 命令列表中默认显示的名称
         }
-
-        /// <summary>
-        /// 插件类型：设置为服务端命令插件
-        /// </summary>
-        /// <returns>插件类型枚举</returns>
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.ClientSide;
-        }
-
 
         [FormulaProperty(false)]
         [DisplayName("设备MAC地址")]

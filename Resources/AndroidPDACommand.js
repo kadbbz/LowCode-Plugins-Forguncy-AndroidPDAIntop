@@ -14,6 +14,58 @@ var HAC_GenerateCellInfo = function (context, formula) {
     return JSON.stringify(cellLocation);
 };
 
+var HAC_GenerateCallbackTicket = function (context, onSuccess) {
+    if (!window.HAC) {
+        alert(ERROR_NOT_RUN_IN_HAC);
+    } else {
+
+        var ticket = {
+            functionName: "hac_onetime_callback_" + new Date().valueOf().toString()
+        };
+
+        if (window.parent) {
+            ticket.iFrameName = window.name;
+        }
+
+        window.HAC.registryCallback(ticket, onSuccess, function (error) {
+            context.CommandExecutor.excuteCommand(context.CommandParam.CommandList, {
+                runTimePageName: context.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "IsSuccess": false,
+                    "Error": error
+                },
+                locationString: "执行异步操作时出错"
+            });
+        });
+
+        return JSON.stringify(ticket);
+    }
+};
+
+var HAC_ReturnToParam = function (OutParamaterName, data) {
+    if (OutParamaterName && OutParamaterName != "") {
+        Forguncy.CommandHelper.setVariableValue(OutParamaterName, data);
+    } else {
+        console.log("OutParamaterName was not set, the value is: " + JSON.stringify(data));
+    }
+};
+
+var HAC_DothanPrinterOp = function (callback) {
+    if (window.dothanPrinter) {
+        var status = window.dothanPrinter.getStatus();
+        if (status === 1 || status === 2) {
+            callback(true);
+        } else {
+            callback(false, status);
+        }
+    } else {
+        alert(ERROR_NOT_RUN_IN_HAC);
+        callback(false, -1);
+    }
+};
+
+
 var Android_PDA_Broadcast_Mode_Scan_Command = (function (_super) {
     __extends(Android_PDA_Broadcast_Mode_Scan_Command, _super);
     function Android_PDA_Broadcast_Mode_Scan_Command() {
@@ -22,12 +74,11 @@ var Android_PDA_Broadcast_Mode_Scan_Command = (function (_super) {
 
     Android_PDA_Broadcast_Mode_Scan_Command.prototype.execute = function () {
 
-        // Get setings
         var param = this.CommandParam;
         var targetCellFormula = param.TargetCell;
         var cellInfo = HAC_GenerateCellInfo(this, targetCellFormula);
 
-        var isModal = this.evaluateFormula(param.IsModalMode);
+        var isModal = this.evaluateFormula(param.ShouldModalMode);
 
         if (window.pda) {
             if (!isModal || isModal === 0) {
@@ -47,9 +98,50 @@ var Android_PDA_Broadcast_Mode_Scan_Command = (function (_super) {
     return Android_PDA_Broadcast_Mode_Scan_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Broadcast_Mode_Scan, AndroidPDACommand", Android_PDA_Broadcast_Mode_Scan_Command);
 
+var Broadcast_Mode_Scan_Async_Command = (function (_super) {
+    __extends(Broadcast_Mode_Scan_Async_Command, _super);
+    function Broadcast_Mode_Scan_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Broadcast_Mode_Scan_Async_Command.prototype.execute = function () {
+
+        var param = this.CommandParam;
+        var isModal = this.evaluateFormula(param.ShouldModalMode);
+        var me = this;
+
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "Result_Received": payload,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.pda.modal_scanAsync的回调"
+            });
+        });
+
+        if (window.pda && window.pda.modal_scanAsync) {
+            if (!isModal || isModal === 0) {
+                window.pda.modal_scanAsync(ticket, 1);
+            } else {
+                window.pda.modal_scanAsync(ticket);
+            }
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Broadcast_Mode_Scan_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Broadcast_Mode_Scan_Async, AndroidPDACommand", Broadcast_Mode_Scan_Async_Command);
 
 var Android_PDA_App_Info_Command = (function (_super) {
     __extends(Android_PDA_App_Info_Command, _super);
@@ -59,7 +151,6 @@ var Android_PDA_App_Info_Command = (function (_super) {
 
     Android_PDA_App_Info_Command.prototype.execute = function () {
 
-        //// Get setings
         var param = this.CommandParam;
         var targetCellFormulaV = param.TargetCellVersion;
         var cellInfoV = HAC_GenerateCellInfo(this, targetCellFormulaV);
@@ -82,8 +173,40 @@ var Android_PDA_App_Info_Command = (function (_super) {
     return Android_PDA_App_Info_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.App_Info, AndroidPDACommand", Android_PDA_App_Info_Command);
+
+var Android_PDA_App_Info2_Command = (function (_super) {
+    __extends(Android_PDA_App_Info2_Command, _super);
+    function Android_PDA_App_Info2_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Android_PDA_App_Info2_Command.prototype.execute = function () {
+
+        var param = this.CommandParam;
+        var targetV = param.TargetVersion;
+
+        var targetP = param.TargetName;
+
+        if (window.app && window.app.getVersion2 && window.app.getPackageName2) {
+            var v = window.app.getVersion2();
+            var p = window.app.getPackageName2();
+
+            HAC_ReturnToParam(targetV, v);
+            HAC_ReturnToParam(targetP, p);
+
+            console.log("从APP获取包名和版本信息");
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Android_PDA_App_Info2_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.App_Info2, AndroidPDACommand", Android_PDA_App_Info2_Command);
 
 var Android_PDA_CScan_Start_Command = (function (_super) {
     __extends(Android_PDA_CScan_Start_Command, _super);
@@ -93,7 +216,6 @@ var Android_PDA_CScan_Start_Command = (function (_super) {
 
     Android_PDA_CScan_Start_Command.prototype.execute = function () {
 
-        // Get setings
         var param = this.CommandParam;
         var targetCellFormula = param.TargetCell;
         var cellInfo = HAC_GenerateCellInfo(this, targetCellFormula);
@@ -111,8 +233,44 @@ var Android_PDA_CScan_Start_Command = (function (_super) {
     return Android_PDA_CScan_Start_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Broadcast_Mode_ContinuousScanStart, AndroidPDACommand", Android_PDA_CScan_Start_Command);
+
+var Broadcast_Mode_ContinuousScanStart_Async_Command = (function (_super) {
+    __extends(Broadcast_Mode_ContinuousScanStart_Async_Command, _super);
+    function Broadcast_Mode_ContinuousScanStart_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Broadcast_Mode_ContinuousScanStart_Async_Command.prototype.execute = function () {
+
+        var me = this;
+
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "Totally_Received": payload,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.pda.continuous_scanAsync的回调"
+            });
+        });
+
+        if (window.pda && window.pda.continuous_scanAsync) {
+            window.pda.continuous_scanAsync(ticket, 0);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+
+    return Broadcast_Mode_ContinuousScanStart_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Broadcast_Mode_ContinuousScanStart_Async, AndroidPDACommand", Broadcast_Mode_ContinuousScanStart_Async_Command);
 
 var Android_PDA_CScan_Stop_Command = (function (_super) {
     __extends(Android_PDA_CScan_Stop_Command, _super);
@@ -135,7 +293,6 @@ var Android_PDA_CScan_Stop_Command = (function (_super) {
     return Android_PDA_CScan_Stop_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Broadcast_Mode_ContinuousScanStop, AndroidPDACommand", Android_PDA_CScan_Stop_Command);
 
 var DialPhone_Command = (function (_super) {
@@ -146,7 +303,6 @@ var DialPhone_Command = (function (_super) {
 
     DialPhone_Command.prototype.execute = function () {
 
-        // Get setings
         var param = this.CommandParam;
         var phone = this.evaluateFormula(param.PhoneNumber);
 
@@ -164,7 +320,6 @@ var DialPhone_Command = (function (_super) {
     return DialPhone_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DialPhone, AndroidPDACommand", DialPhone_Command);
 
 var Set_ActionBar_Color_Command = (function (_super) {
@@ -175,7 +330,6 @@ var Set_ActionBar_Color_Command = (function (_super) {
 
     Set_ActionBar_Color_Command.prototype.execute = function () {
 
-        // Get setings
         var param = this.CommandParam;
         var colorS = this.evaluateFormula(param.ColorString);
 
@@ -191,9 +345,7 @@ var Set_ActionBar_Color_Command = (function (_super) {
     return Set_ActionBar_Color_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_ActionBar_Color, AndroidPDACommand", Set_ActionBar_Color_Command);
-
 
 var Get_ActionBar_Color_Command = (function (_super) {
     __extends(Get_ActionBar_Color_Command, _super);
@@ -203,7 +355,6 @@ var Get_ActionBar_Color_Command = (function (_super) {
 
     Get_ActionBar_Color_Command.prototype.execute = function () {
 
-        //// Get setings
         var param = this.CommandParam;
         var targetCellFormulaV = param.TargetCell;
         var cellInfoV = HAC_GenerateCellInfo(this, targetCellFormulaV);
@@ -221,9 +372,34 @@ var Get_ActionBar_Color_Command = (function (_super) {
     return Get_ActionBar_Color_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_ActionBar_Color, AndroidPDACommand", Get_ActionBar_Color_Command);
 
+var Get_ActionBar_Color2_Command = (function (_super) {
+    __extends(Get_ActionBar_Color2_Command, _super);
+    function Get_ActionBar_Color2_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Get_ActionBar_Color2_Command.prototype.execute = function () {
+
+        var params = this.CommandParam;
+        var pName = params.OutParamaterName;
+
+        if (window.app && window.app.getActionBarColor2) {
+            var color = window.app.getActionBarColor2();
+
+            HAC_ReturnToParam(pName, color);
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    return Get_ActionBar_Color2_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_ActionBar_Color2, AndroidPDACommand", Get_ActionBar_Color2_Command);
 
 var Get_Location_Command = (function (_super) {
     __extends(Get_Location_Command, _super);
@@ -233,9 +409,15 @@ var Get_Location_Command = (function (_super) {
 
     Get_Location_Command.prototype.execute = function () {
 
-        //// Get setings
         var param = this.CommandParam;
-        var cs = this.evaluateFormula(param.CS);
+        var cs = this.evaluateFormula(param.CoordinateSystem);
+        var mode = "wgs84";
+        switch (cs) {
+            case SupportedType.BD09:
+                { mode = "bd09"; break; }
+            case SupportedType.GCJ02:
+                { mode = "gcj02"; break; }
+        }
 
         var latCellFormulaV = param.LatCell;
         var latCell = HAC_GenerateCellInfo(this, latCellFormulaV);
@@ -247,7 +429,7 @@ var Get_Location_Command = (function (_super) {
         var errCell = HAC_GenerateCellInfo(this, errCellFormulaV);
 
         if (window.geo) {
-            window.geo.getLocation(cs, latCell, lonCell, errCell);
+            window.geo.getLocation(mode, latCell, lonCell, errCell);
 
             console.log("获取地理位置");
 
@@ -257,12 +439,70 @@ var Get_Location_Command = (function (_super) {
 
     };
 
+    var SupportedType = {
+        WGS84: 0,
+        GCJ02: 1,
+        BD09: 3
+    }
+
     return Get_Location_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_Location, AndroidPDACommand", Get_Location_Command);
 
+var Get_Location_Async_Command = (function (_super) {
+    __extends(Get_Location_Async_Command, _super);
+    function Get_Location_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Get_Location_Async_Command.prototype.execute = function () {
+
+        var param = this.CommandParam;
+        var cs = this.evaluateFormula(param.CoordinateSystem);
+        var mode = "wgs84";
+        switch (cs) {
+            case SupportedType.BD09:
+                { mode = "bd09"; break; }
+            case SupportedType.GCJ02:
+                { mode = "gcj02"; break; }
+        }
+
+        var me = this;
+
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "Latitude": payload,
+                    "Longitude": payload2,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.geo.getLocationAsync的回调"
+            });
+        });
+
+        if (window.geo && window.geo.getLocationAsync) {
+            window.geo.getLocationAsync(mode, ticket);
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+
+    };
+
+    var SupportedType = {
+        WGS84: 0,
+        GCJ02: 1,
+        BD09: 3
+    }
+
+    return Get_Location_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Get_Location_Async, AndroidPDACommand", Get_Location_Async_Command);
 
 var Set_ActionBar_Style_Command = (function (_super) {
     __extends(Set_ActionBar_Style_Command, _super);
@@ -272,7 +512,6 @@ var Set_ActionBar_Style_Command = (function (_super) {
 
     Set_ActionBar_Style_Command.prototype.execute = function () {
 
-        //// Get setings
         var param = this.CommandParam;
         var ssa = this.evaluateFormula(param.ShouldShowActionBar);
         var ac = this.evaluateFormula(param.ActionBarColor);
@@ -308,7 +547,6 @@ var Set_ActionBar_Style_Command = (function (_super) {
     return Set_ActionBar_Style_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_ActionBar_Style, AndroidPDACommand", Set_ActionBar_Style_Command);
 
 var Set_Scanner_Options_Command = (function (_super) {
@@ -319,7 +557,6 @@ var Set_Scanner_Options_Command = (function (_super) {
 
     Set_Scanner_Options_Command.prototype.execute = function () {
 
-        //// Get setings
         var param = this.CommandParam;
         var action = this.evaluateFormula(param.Action); // com.android.server.scan
         var extra = this.evaluateFormula(param.Extra); // scannerdata
@@ -337,9 +574,7 @@ var Set_Scanner_Options_Command = (function (_super) {
     return Set_Scanner_Options_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Scanner_Options, AndroidPDACommand", Set_Scanner_Options_Command);
-
 
 var Set_Option_Menu_Command = (function (_super) {
     __extends(Set_Option_Menu_Command, _super);
@@ -349,7 +584,6 @@ var Set_Option_Menu_Command = (function (_super) {
 
     Set_Option_Menu_Command.prototype.execute = function () {
 
-        //// Get setings
         var param = this.CommandParam;
 
         var sss = this.evaluateFormula(param.ShouldShowSettings);
@@ -378,9 +612,7 @@ var Set_Option_Menu_Command = (function (_super) {
     return Set_Option_Menu_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Option_Menu, AndroidPDACommand", Set_Option_Menu_Command);
-
 
 var Open_Builtin_Activity_Command = (function (_super) {
     __extends(Open_Builtin_Activity_Command, _super);
@@ -390,7 +622,6 @@ var Open_Builtin_Activity_Command = (function (_super) {
 
     Open_Builtin_Activity_Command.prototype.execute = function () {
 
-        //// Get setings
         var param = this.CommandParam;
 
         if (window.app) {
@@ -414,14 +645,13 @@ var Open_Builtin_Activity_Command = (function (_super) {
 
     };
 
+    var BuiltinPage = {
+        配置: 0,
+        快速设置: 1
+    }
+
     return Open_Builtin_Activity_Command;
 }(Forguncy.CommandBase));
-
-var BuiltinPage = {
-    配置: 0,
-    快速设置: 1
-}
-
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Open_Builtin_Activity, AndroidPDACommand", Open_Builtin_Activity_Command);
 
@@ -433,7 +663,6 @@ var CloseApp_Command = (function (_super) {
 
     CloseApp_Command.prototype.execute = function () {
 
-        //// Get setings
         var param = this.CommandParam;
 
         if (window.app && window.app.closeApp) {
@@ -447,7 +676,6 @@ var CloseApp_Command = (function (_super) {
     return CloseApp_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.CloseApp, AndroidPDACommand", CloseApp_Command);
 
 var PDFPreview_Command = (function (_super) {
@@ -458,7 +686,6 @@ var PDFPreview_Command = (function (_super) {
 
     PDFPreview_Command.prototype.execute = function () {
 
-        // Get setings
         var param = this.CommandParam;
         var url = this.evaluateFormula(param.Url);
         var name = this.evaluateFormula(param.FileName);
@@ -475,7 +702,6 @@ var PDFPreview_Command = (function (_super) {
     return PDFPreview_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.PDFPreview, AndroidPDACommand", PDFPreview_Command);
 
 var Upsert_LocalKv_Command = (function (_super) {
@@ -486,7 +712,6 @@ var Upsert_LocalKv_Command = (function (_super) {
 
     Upsert_LocalKv_Command.prototype.execute = function () {
 
-        // Get setings
         var param = this.CommandParam;
         var key = this.evaluateFormula(param.KeyString);
         var value = this.evaluateFormula(param.ValueString);
@@ -502,9 +727,7 @@ var Upsert_LocalKv_Command = (function (_super) {
     return Upsert_LocalKv_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Upsert_LocalKv, AndroidPDACommand", Upsert_LocalKv_Command);
-
 
 var Retrieve_LocalKv_Command = (function (_super) {
     __extends(Retrieve_LocalKv_Command, _super);
@@ -514,7 +737,6 @@ var Retrieve_LocalKv_Command = (function (_super) {
 
     Retrieve_LocalKv_Command.prototype.execute = function () {
 
-        // Get setings
         var param = this.CommandParam;
         var key = this.evaluateFormula(param.KeyString);
         var targetCellFormulaV = param.TargetCell;
@@ -531,7 +753,6 @@ var Retrieve_LocalKv_Command = (function (_super) {
     return Retrieve_LocalKv_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Retrieve_LocalKv, AndroidPDACommand", Retrieve_LocalKv_Command);
 
 var Retrieve_LocalKv_Command2 = (function (_super) {
@@ -542,7 +763,6 @@ var Retrieve_LocalKv_Command2 = (function (_super) {
 
     Retrieve_LocalKv_Command2.prototype.execute = function () {
 
-        // Get setings
         var param = this.CommandParam;
         var key = this.evaluateFormula(param.KeyString);
         var pName = param.OutParamaterName;
@@ -559,7 +779,6 @@ var Retrieve_LocalKv_Command2 = (function (_super) {
     return Retrieve_LocalKv_Command2;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Retrieve_LocalKv2, AndroidPDACommand", Retrieve_LocalKv_Command2);
 
 var Reset_LocalKv_Command = (function (_super) {
@@ -570,7 +789,6 @@ var Reset_LocalKv_Command = (function (_super) {
 
     Reset_LocalKv_Command.prototype.execute = function () {
 
-        // Get setings
         var param = this.CommandParam;
         var key = this.evaluateFormula(param.KeyString);
 
@@ -585,30 +803,7 @@ var Reset_LocalKv_Command = (function (_super) {
     return Reset_LocalKv_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Reset_LocalKv, AndroidPDACommand", Reset_LocalKv_Command);
-
-var HAC_DothanPrinterOp = function (callback) {
-    if (window.dothanPrinter) {
-        var status = window.dothanPrinter.getStatus();
-        if (status === 1 || status === 2) {
-            callback(true);
-        } else {
-            callback(false, status);
-        }
-    } else {
-        alert(ERROR_NOT_RUN_IN_HAC);
-        callback(false, -1);
-    }
-};
-
-var HAC_ReturnToParam = function (OutParamaterName, data) {
-    if (OutParamaterName && OutParamaterName != "") {
-        Forguncy.CommandHelper.setVariableValue(OutParamaterName, data);
-    } else {
-        console.log("OutParamaterName was not set, the value is: " + JSON.stringify(data));
-    }
-};
 
 var OpenDothanPrinter_Command = (function (_super) {
     __extends(OpenDothanPrinter_Command, _super);
@@ -681,7 +876,6 @@ var OpenDothanPrinter_Command = (function (_super) {
 
     return OpenDothanPrinter_Command;
 }(Forguncy.CommandBase));
-
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_Device, AndroidPDACommand", OpenDothanPrinter_Command);
 
@@ -760,7 +954,6 @@ var JobDothanPrinter_Command = (function (_super) {
 
     return JobDothanPrinter_Command;
 }(Forguncy.CommandBase));
-
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_Job, AndroidPDACommand", JobDothanPrinter_Command);
 
@@ -881,7 +1074,6 @@ var DothanPrinter_DrawContent_Command = (function (_super) {
 
     return DothanPrinter_DrawContent_Command;
 }(Forguncy.CommandBase));
-
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_DrawContent, AndroidPDACommand", DothanPrinter_DrawContent_Command);
 
@@ -1073,7 +1265,6 @@ var DothanPrinter_DrawShape_Command = (function (_super) {
     return DothanPrinter_DrawShape_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.DothanPrinter_DrawShape, AndroidPDACommand", DothanPrinter_DrawShape_Command);
 
 var NfcReader_Command = (function (_super) {
@@ -1097,8 +1288,42 @@ var NfcReader_Command = (function (_super) {
     return NfcReader_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.NfcReader, AndroidPDACommand", NfcReader_Command);
+
+var NfcReader_Async_Command = (function (_super) {
+    __extends(NfcReader_Async_Command, _super);
+    function NfcReader_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    NfcReader_Async_Command.prototype.execute = function () {
+
+        var me = this;
+
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "NFC_Tag": payload,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.nfc.readTagIdAsync的回调"
+            });
+        });
+
+        if (window.nfc && window.nfc.readTagIdAsync) {
+            window.nfc.readTagIdAsync(ticket);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return NfcReader_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.NfcReader_Async, AndroidPDACommand", NfcReader_Async_Command);
 
 var JPush_Info_Command = (function (_super) {
     __extends(JPush_Info_Command, _super);
@@ -1123,9 +1348,7 @@ var JPush_Info_Command = (function (_super) {
     return JPush_Info_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.JPush_Info, AndroidPDACommand", JPush_Info_Command);
-
 
 var Device_Info_Command = (function (_super) {
     __extends(Device_Info_Command, _super);
@@ -1150,9 +1373,7 @@ var Device_Info_Command = (function (_super) {
     return Device_Info_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Device_Info, AndroidPDACommand", Device_Info_Command);
-
 
 var BLE_Scan_Command = (function (_super) {
     __extends(BLE_Scan_Command, _super);
@@ -1176,8 +1397,41 @@ var BLE_Scan_Command = (function (_super) {
     return BLE_Scan_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Scan, AndroidPDACommand", BLE_Scan_Command);
+
+var BLE_Scan_Async_Command = (function (_super) {
+    __extends(BLE_Scan_Async_Command, _super);
+    function BLE_Scan_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    BLE_Scan_Async_Command.prototype.execute = function () {
+
+        var me = this;
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "Device_List": payload,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.ble.scanAsync的回调"
+            });
+        });
+
+        if (window.ble && window.ble.scanAsync) {
+            window.ble.scanAsync(ticket);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return BLE_Scan_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Scan_Async, AndroidPDACommand", BLE_Scan_Async_Command);
 
 var BLE_Read_Command = (function (_super) {
     __extends(BLE_Read_Command, _super);
@@ -1211,8 +1465,52 @@ var BLE_Read_Command = (function (_super) {
     return BLE_Read_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Read, AndroidPDACommand", BLE_Read_Command);
+
+var BLE_Read_Async_Command = (function (_super) {
+    __extends(BLE_Read_Async_Command, _super);
+    function BLE_Read_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    BLE_Read_Async_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var MAC = this.evaluateFormula(params.MacAddress);
+        var Service = this.evaluateFormula(params.ServiceUUID);
+        var Character = this.evaluateFormula(params.CharacteristicUUID);
+
+        var me = this;
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "Data_In_BASE64": payload,
+                    "Data_In_ByteArray": payload2,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.ble.readAsync的回调"
+            });
+        });
+
+        if (window.ble && window.ble.readAsync) {
+            window.ble.readAsync(MAC, Service, Character, ticket);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    var SupportedReadMode = {
+        Read: 0,
+        Notify: 1,
+        Indicate: 2
+    }
+
+    return BLE_Read_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Read_Async, AndroidPDACommand", BLE_Read_Async_Command);
 
 var BLE_Register_Command = (function (_super) {
     __extends(BLE_Register_Command, _super);
@@ -1257,8 +1555,63 @@ var BLE_Register_Command = (function (_super) {
     return BLE_Register_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Register, AndroidPDACommand", BLE_Register_Command);
+
+var BLE_Register_Async_Command = (function (_super) {
+    __extends(BLE_Register_Async_Command, _super);
+    function BLE_Register_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    BLE_Register_Async_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var MAC = this.evaluateFormula(params.MacAddress);
+        var Service = this.evaluateFormula(params.ServiceUUID);
+        var Character = this.evaluateFormula(params.CharacteristicUUID);
+        var Mode = params.Mode;
+
+        var me = this;
+
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "Data_In_BASE64": payload,
+                    "Data_In_ByteArray": payload2,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.ble.notifyAsync/indicateAsync的回调"
+            });
+        });
+
+        if (window.ble && window.ble.notifyAsync && window.ble.indicateAsync) {
+            switch (Mode) {
+                case SupportedReadMode.Notify: {
+                    window.ble.notifyAsync(MAC, Service, Character, ticket);
+                    break;
+                }
+                case SupportedReadMode.Indicate: {
+                    window.ble.indicateAsync(MAC, Service, Character, ticket);
+                    break;
+                }
+            }
+
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    var SupportedReadMode = {
+        Notify: 0,
+        Indicate: 1
+    }
+
+    return BLE_Register_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Register_Async, AndroidPDACommand", BLE_Register_Async_Command);
 
 var BLE_UR_Command = (function (_super) {
     __extends(BLE_UR_Command, _super);
@@ -1299,7 +1652,6 @@ var BLE_UR_Command = (function (_super) {
     return BLE_UR_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Unregister, AndroidPDACommand", BLE_UR_Command);
 
 var BLE_Write_Command = (function (_super) {
@@ -1327,8 +1679,46 @@ var BLE_Write_Command = (function (_super) {
     return BLE_Write_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Write, AndroidPDACommand", BLE_Write_Command);
+
+var BLE_Write_Async_Command = (function (_super) {
+    __extends(BLE_Write_Async_Command, _super);
+    function BLE_Write_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    BLE_Write_Async_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var MAC = this.evaluateFormula(params.MacAddress);
+        var Service = this.evaluateFormula(params.ServiceUUID);
+        var Character = this.evaluateFormula(params.CharacteristicUUID);
+        var Data = this.evaluateFormula(params.DataCell);
+
+        var me = this;
+
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.ble.writeAsync的回调"
+            });
+        });
+
+        if (window.ble && window.ble.writeAsync) {
+            window.ble.writeAsync(MAC, Service, Character, Data, ticket);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return BLE_Write_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.BLE_Write_Async, AndroidPDACommand", BLE_Write_Async_Command);
 
 var Camera_Take_Photo_Command = (function (_super) {
     __extends(Camera_Take_Photo_Command, _super);
@@ -1351,8 +1741,43 @@ var Camera_Take_Photo_Command = (function (_super) {
     return Camera_Take_Photo_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Camera_Take_Photo, AndroidPDACommand", Camera_Take_Photo_Command);
+
+var Camera_Take_Photo_Async_Command = (function (_super) {
+    __extends(Camera_Take_Photo_Async_Command, _super);
+    function Camera_Take_Photo_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Camera_Take_Photo_Async_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var isSnapshot = this.evaluateFormula(params.IsSnapshot);
+        var me = this;
+
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "File_Uri": payload,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.camera.takePhotoAsync的回调"
+            });
+        });
+
+        if (window.camera && window.camera.takePhotoAsync) {
+            window.camera.takePhotoAsync(isSnapshot, ticket);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return Camera_Take_Photo_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Camera_Take_Photo_Async, AndroidPDACommand", Camera_Take_Photo_Async_Command);
 
 var Camera_Take_Video_Command = (function (_super) {
     __extends(Camera_Take_Video_Command, _super);
@@ -1375,8 +1800,42 @@ var Camera_Take_Video_Command = (function (_super) {
     return Camera_Take_Video_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Camera_Take_Video, AndroidPDACommand", Camera_Take_Video_Command);
+
+var Camera_Take_Video_Async_Command = (function (_super) {
+    __extends(Camera_Take_Video_Async_Command, _super);
+    function Camera_Take_Video_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Camera_Take_Video_Async_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var isSnapshot = this.evaluateFormula(params.IsSnapshot);
+        var me = this;
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "File_Uri": payload,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.camera.takeVideoAsync的回调"
+            });
+        });
+
+        if (window.camera && window.camera.takeVideoAsync) {
+            window.camera.takeVideoAsync(isSnapshot, ticket);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return Camera_Take_Video_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Camera_Take_Video_Async, AndroidPDACommand", Camera_Take_Video_Async_Command);
 
 var File_Load_Base64_Command = (function (_super) {
     __extends(File_Load_Base64_Command, _super);
@@ -1408,7 +1867,6 @@ var File_Load_Base64_Command = (function (_super) {
     return File_Load_Base64_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.File_Load_Base64, AndroidPDACommand", File_Load_Base64_Command);
 
 var File_Add_Watermark_Command = (function (_super) {
@@ -1436,8 +1894,46 @@ var File_Add_Watermark_Command = (function (_super) {
     return File_Add_Watermark_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.File_Add_Watermark, AndroidPDACommand", File_Add_Watermark_Command);
+
+var File_Add_Watermark_Async_Command = (function (_super) {
+    __extends(File_Add_Watermark_Async_Command, _super);
+    function File_Add_Watermark_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    File_Add_Watermark_Async_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var FileUri = this.evaluateFormula(params.FileUri);
+        var WMText = this.evaluateFormula(params.WMText);
+        var WMColor = this.evaluateFormula(params.WMColor);
+        var WMTileMode = params.WMTileMode;
+        var me = this;
+
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "File_Uri": payload,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.hac_file.drawWatermarkForImageAsync的回调"
+            });
+        });
+
+        if (window.hac_file && window.hac_file.drawWatermarkForImageAsync) {
+            window.hac_file.drawWatermarkForImageAsync(FileUri, WMText, WMTileMode, WMColor, ticket);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return File_Add_Watermark_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.File_Add_Watermark_Async, AndroidPDACommand", File_Add_Watermark_Async_Command);
 
 var Set_Offline_Mode_Command = (function (_super) {
     __extends(Set_Offline_Mode_Command, _super);
@@ -1458,7 +1954,6 @@ var Set_Offline_Mode_Command = (function (_super) {
 
     return Set_Offline_Mode_Command;
 }(Forguncy.CommandBase));
-
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Set_Offline_Mode, AndroidPDACommand", Set_Offline_Mode_Command);
 
@@ -1481,7 +1976,6 @@ var Vibrate_Command = (function (_super) {
 
     return Vibrate_Command;
 }(Forguncy.CommandBase));
-
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Vibrate, AndroidPDACommand", Vibrate_Command);
 
@@ -1524,9 +2018,7 @@ var Play_Ringtone_Command = (function (_super) {
     return Play_Ringtone_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.PlayRingtone, AndroidPDACommand", Play_Ringtone_Command);
-
 
 var ESCPrinter_Scan_Command = (function (_super) {
     __extends(ESCPrinter_Scan_Command, _super);
@@ -1549,8 +2041,40 @@ var ESCPrinter_Scan_Command = (function (_super) {
     return ESCPrinter_Scan_Command;
 }(Forguncy.CommandBase));
 
-
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.ESCPrinter_Scan, AndroidPDACommand", ESCPrinter_Scan_Command);
+
+var ESCPrinter_Scan_Async_Command = (function (_super) {
+    __extends(ESCPrinter_Scan_Async_Command, _super);
+    function ESCPrinter_Scan_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    ESCPrinter_Scan_Async_Command.prototype.execute = function () {
+        var me = this;
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "Printer_List": payload,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.escBtPrinter.scanAsync的回调"
+            });
+        });
+
+        if (window.escBtPrinter && window.escBtPrinter.scanAsync) {
+            window.escBtPrinter.scanAsync(ticket);
+        } else {
+            alert(ERROR_NOT_RUN_IN_HAC);
+        }
+    };
+
+    return ESCPrinter_Scan_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.ESCPrinter_Scan_Async, AndroidPDACommand", ESCPrinter_Scan_Async_Command);
 
 var ESCPrinter_Print_Command = (function (_super) {
     __extends(ESCPrinter_Print_Command, _super);
@@ -1575,6 +2099,5 @@ var ESCPrinter_Print_Command = (function (_super) {
 
     return ESCPrinter_Print_Command;
 }(Forguncy.CommandBase));
-
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.ESCPrinter_Print, AndroidPDACommand", ESCPrinter_Print_Command);

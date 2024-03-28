@@ -9,8 +9,8 @@ namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Bluetooth.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(117)]
-    public class BLE_Register : Command
+    [OrderWeight(1117)]
+    public class BLE_Register : BaseCommand
     {
 
         /// <summary>
@@ -19,18 +19,8 @@ namespace AndroidPDACommand
         /// <returns>易读的字符串</returns>
         public override string ToString()
         {
-            return "向BLE设备订阅数据通知"; // 命令列表中默认显示的名称
+            return "向BLE设备订阅数据通知并填充到单元格"; // 命令列表中默认显示的名称
         }
-
-        /// <summary>
-        /// 插件类型：设置为服务端命令插件
-        /// </summary>
-        /// <returns>插件类型枚举</returns>
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.ClientSide;
-        }
-
 
         [FormulaProperty(false)]
         [DisplayName("设备MAC地址")]

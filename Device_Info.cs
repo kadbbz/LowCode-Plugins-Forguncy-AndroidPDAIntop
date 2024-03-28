@@ -13,7 +13,7 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Phone.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(902)]
-    public class Device_Info : Command
+    public class Device_Info : BaseCommand
     {
         [DisplayName("将唯一标识返回到变量")]
         [Description("Android 6开始逐渐收紧对网卡Mac地址的读取，推荐采用SSAID作为设备的唯一标识。")]
@@ -30,11 +30,6 @@ namespace AndroidPDACommand
                 return "读取设备唯一标识：" + OutParamaterName.ToString();
             }
             
-        }
-
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.All;
         }
 
     }

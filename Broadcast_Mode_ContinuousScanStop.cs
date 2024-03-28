@@ -13,17 +13,12 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Scan.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(201)]
-    public class Broadcast_Mode_ContinuousScanStop : Command
+    public class Broadcast_Mode_ContinuousScanStop : BaseCommand
     {
 
         public override string ToString()
         {
             return "停止持续扫码";
-        }
-
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.All;
         }
     }
 }

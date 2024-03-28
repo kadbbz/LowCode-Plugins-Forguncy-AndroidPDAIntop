@@ -13,7 +13,7 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Settings.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(820)]
-    public class Set_Offline_Mode : Command
+    public class Set_Offline_Mode : BaseCommand
     {
 
         [DisplayName("是否为离线模式")]
@@ -24,11 +24,6 @@ namespace AndroidPDACommand
         public override string ToString()
         {
             return "设置离线模式";
-        }
-
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.ClientSide;
         }
 
     }

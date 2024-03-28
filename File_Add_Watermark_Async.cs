@@ -9,8 +9,8 @@ namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Image.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(1165)]
-    public class File_Add_Watermark : BaseCommand
+    [OrderWeight(165)]
+    public class File_Add_Watermark_Async : BaseAsyncCommand
     {
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace AndroidPDACommand
         /// <returns>易读的字符串</returns>
         public override string ToString()
         {
-            return "为图片添加水印并将文件路径填充到单元格"; // 命令列表中默认显示的名称
+            return "为图片添加水印"; // 命令列表中默认显示的名称
         }
 
         [FormulaProperty(false)]
@@ -39,9 +39,9 @@ namespace AndroidPDACommand
         [DisplayName("是否为平铺模式")]
         public bool WMTileMode { get; set; } = false;
 
-        [FormulaProperty(true)]
-        [DisplayName("目标单元格：处理后的文件路径（Uri格式）")]
-        public object TargetCell { get; set; }
+        [Browsable(false)]
+        [ResultToProperty]
+        public string SubCommandParam1 { get; set; } = "File_Uri";
 
     }
 }

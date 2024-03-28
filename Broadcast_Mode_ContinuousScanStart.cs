@@ -12,8 +12,8 @@ namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Scan.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(200)]
-    public class Broadcast_Mode_ContinuousScanStart : Command, IPropertySearchable, IForceGenerateCell
+    [OrderWeight(1200)]
+    public class Broadcast_Mode_ContinuousScanStart : BaseCommand
     {
         [FormulaProperty(true)]
         [DisplayName("目标单元格")]
@@ -21,33 +21,7 @@ namespace AndroidPDACommand
 
         public override string ToString()
         {
-            return "开始持续扫码到单元格";
-        }
-
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.All;
-        }
-
-        public IEnumerable<FindResultItem> EnumSearchableProperty(LocationIndicator location)
-        {
-            yield return new FindResultItem()
-            {
-                Location = location.AppendProperty("目标单元格"),
-                Value = TargetCell?.ToString()
-            };
-        }
-
-        public IEnumerable<GenerateCellInfo> GetForceGenerateCells()
-        {
-            if (TargetCell is IFormulaReferObject formulaReferObject)
-            {
-                var cellInfo = formulaReferObject.GetGenerateCellInfo();
-                if (cellInfo != null)
-                {
-                    yield return cellInfo;
-                }
-            }
+            return "开始监听扫码结果并填充到单元格";
         }
     }
 }

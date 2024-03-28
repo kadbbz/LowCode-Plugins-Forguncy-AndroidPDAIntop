@@ -72,10 +72,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Info2.cs" />
+    <Compile Include="BaseAsyncCommand.cs" />
+    <Compile Include="BaseCommand.cs" />
+    <Compile Include="BLE_Read_Async.cs" />
+    <Compile Include="BLE_Register_Async.cs" />
+    <Compile Include="BLE_Scan_Async.cs" />
     <Compile Include="BLE_Unregister.cs" />
     <Compile Include="BLE_Register.cs" />
+    <Compile Include="BLE_Write_Async.cs" />
+    <Compile Include="Broadcast_Mode_ContinuousScanStart_Async.cs" />
+    <Compile Include="Broadcast_Mode_Scan_Async.cs" />
+    <Compile Include="Camera_Take_Photo_Async.cs" />
+    <Compile Include="Camera_Take_Video_Async.cs" />
     <Compile Include="ESCPrinter_Print.cs" />
+    <Compile Include="ESCPrinter_Scan_Async.cs" />
     <Compile Include="ESCPrinter_Scan.cs" />
+    <Compile Include="File_Add_Watermark_Async.cs" />
+    <Compile Include="Get_ActionBar_Color2.cs" />
+    <Compile Include="Get_Location_Async.cs" />
+    <Compile Include="NfcReader_Async.cs" />
     <Compile Include="StartVibrate.cs" />
     <Compile Include="PlayRingtone.cs" />
     <Compile Include="File_Add_Watermark.cs" />
@@ -113,6 +129,7 @@
     <Compile Include="Set_ActionBar_Color.cs" />
     <Compile Include="Broadcast_Mode_Scan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_SplitCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

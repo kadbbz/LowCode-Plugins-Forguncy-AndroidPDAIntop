@@ -7,7 +7,7 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Phone.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(896)]
-    public class PlayRingtone : Command
+    public class PlayRingtone : BaseCommand
     {
         public override string ToString()
         {
@@ -17,11 +17,6 @@ namespace AndroidPDACommand
         [ComboProperty]
         [DisplayName("声音类型")]
         public SupportedRingtoneType Type { get; set; } = SupportedRingtoneType.Notification;
-
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.ClientSide;
-        }
 
     }
 

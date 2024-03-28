@@ -10,19 +10,20 @@ using System.Windows.Forms;
 
 namespace AndroidPDACommand
 {
-    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Kv.png")]
+    [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Scan.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(402)]
-    public class Reset_LocalKv : BaseCommand
+    [OrderWeight(200)]
+    public class Broadcast_Mode_ContinuousScanStart_Async : BaseAsyncCommand
     {
-        [FormulaProperty]
-        [DisplayName("键（大小写敏感）")]
-        public object KeyString { get; set; }
 
         public override string ToString()
         {
-            return "从离线存储中删除指定键值";
+            return "开始持续扫码";
         }
+
+        [Browsable(false)]
+        [ResultToProperty]
+        public string SubCommandParam1 { get; set; } = "Totally_Received";
 
     }
 }

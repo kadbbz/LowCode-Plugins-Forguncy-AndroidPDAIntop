@@ -13,16 +13,11 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Phone.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(910)]
-    public class CloseApp : Command
+    public class CloseApp : BaseCommand
     {
         public override string ToString()
         {
             return "强制关闭APP";
-        }
-
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.All;
         }
 
     }

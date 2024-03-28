@@ -12,13 +12,16 @@ namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Location.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(100)]
-    public class Get_Location : Command, IPropertySearchable, IForceGenerateCell
+    [OrderWeight(1100)]
+    public class Get_Location : BaseCommand
     {
-
-        [FormulaProperty]
-        [DisplayName("坐标体系：支持WGS84、GCJ02、BD09")]
+        // 兼容旧版本
+        [Browsable(false)]
         public object CS { get; set; }
+
+        [ComboProperty]
+        [DisplayName("坐标体系")]
+        public SupportedCoordinateSystem CoordinateSystem { get; set; } = SupportedCoordinateSystem.BD09;
 
         [FormulaProperty(true)]
         [DisplayName("目标单元格（Latitude/纬度）")]
@@ -38,68 +41,15 @@ namespace AndroidPDACommand
             return "读取地理位置到单元格";
         }
 
-        public override CommandScope GetCommandScope()
+        public enum SupportedCoordinateSystem
         {
-            return CommandScope.All;
+            [Description("WGS84：GPS默认坐标")]
+            WGS84=0,
+            [Description("GCJ02：国标地图坐标")]
+            GCJ02=1,
+            [Description("BD09：百度地图专用坐标")]
+            BD09=3
         }
 
-        public IEnumerable<FindResultItem> EnumSearchableProperty(LocationIndicator location)
-        {
-            List<FindResultItem> result = new List<FindResultItem>();
-
-            result.Add(new FindResultItem()
-            {
-                Location = location.AppendProperty("目标单元格（Latitude/纬度）"),
-                Value = LatCell?.ToString()
-            });
-
-            result.Add(new FindResultItem()
-            {
-                Location = location.AppendProperty("目标单元格（Longtitude/经度）"),
-                Value = LonCell?.ToString()
-            });
-
-            result.Add(new FindResultItem()
-            {
-                Location = location.AppendProperty("目标单元格（错误信息）"),
-                Value = ErrCell?.ToString()
-            });
-
-            return result ;
-        }
-
-        public IEnumerable<GenerateCellInfo> GetForceGenerateCells()
-        {
-            List<GenerateCellInfo> result = new List<GenerateCellInfo>();
-
-            if (LatCell is IFormulaReferObject formulaReferObject2)
-            {
-                var cellInfo = formulaReferObject2.GetGenerateCellInfo();
-                if (cellInfo != null)
-                {
-                    result.Add(cellInfo);
-                }
-            }
-
-            if (LonCell is IFormulaReferObject formulaReferObject3)
-            {
-                var cellInfo = formulaReferObject3.GetGenerateCellInfo();
-                if (cellInfo != null)
-                {
-                    result.Add(cellInfo);
-                }
-            }
-
-            if (ErrCell is IFormulaReferObject formulaReferObject4)
-            {
-                var cellInfo = formulaReferObject4.GetGenerateCellInfo();
-                if (cellInfo != null)
-                {
-                    result.Add(cellInfo);
-                }
-            }
-
-            return result;
-        }
     }
 }

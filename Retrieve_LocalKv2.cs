@@ -13,7 +13,7 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Kv.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(400)]
-    public class Retrieve_LocalKv2 : Command
+    public class Retrieve_LocalKv2 : BaseCommand
     {
         [FormulaProperty]
         [DisplayName("键（大小写敏感）")]
@@ -29,17 +29,12 @@ namespace AndroidPDACommand
         {
             if (KeyString == null)
             {
-                return "从离线存储中读取"; // 命令列表中默认显示的名称
+                return "从离线存储中读取值"; // 命令列表中默认显示的名称
             }
             else
             {
-                return "从离线存储中读取：" + KeyString.ToString();
+                return "从离线存储中读取值：" + KeyString.ToString();
             }
-        }
-
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.All;
         }
     }
 }

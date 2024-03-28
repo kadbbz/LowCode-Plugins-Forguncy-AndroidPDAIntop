@@ -14,7 +14,7 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Phone.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(895)]
-    public class Vibrate : Command
+    public class Vibrate : BaseCommand
     {
         public override string ToString()
         {
@@ -25,11 +25,6 @@ namespace AndroidPDACommand
         [SearchableProperty]
         [DisplayName("持续时间（秒）")]
         public object Duration { get; set; } = 1.0;
-
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.ClientSide;
-        }
 
     }
 

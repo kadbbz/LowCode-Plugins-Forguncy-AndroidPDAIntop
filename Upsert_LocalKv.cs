@@ -13,7 +13,7 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Kv.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(401)]
-    public class Upsert_LocalKv : Command, IPropertySearchable, IForceGenerateCell
+    public class Upsert_LocalKv : BaseCommand
     {
         [FormulaProperty]
         [DisplayName("键（大小写敏感）")]
@@ -26,55 +26,6 @@ namespace AndroidPDACommand
         public override string ToString()
         {
             return "将键值存入离线存储";
-        }
-
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.All;
-        }
-
-        public IEnumerable<FindResultItem> EnumSearchableProperty(LocationIndicator location)
-        {
-            List<FindResultItem> result = new List<FindResultItem>();
-
-            result.Add(new FindResultItem() { 
-                Location = location.AppendProperty("键"),
-                Value = KeyString?.ToString()
-            });
-
-            result.Add(new FindResultItem()
-            {
-                Location = location.AppendProperty("值"),
-                Value = ValueString?.ToString()
-            });
-
-            return result;
-        }
-
-        public IEnumerable<GenerateCellInfo> GetForceGenerateCells()
-        {
-           
-            List<GenerateCellInfo> result = new List<GenerateCellInfo>();
-
-            if (KeyString is IFormulaReferObject formulaReferObject)
-            {
-                var kString = formulaReferObject.GetGenerateCellInfo();
-                if (kString != null)
-                {
-                    result.Add(kString);
-                }
-            }
-
-            if (ValueString is IFormulaReferObject formulaReferObject2)
-            {
-                var vString = formulaReferObject2.GetGenerateCellInfo();
-                if (vString != null)
-                {
-                    result.Add(vString);
-                }
-            }
-
-            return result;
         }
     }
 }

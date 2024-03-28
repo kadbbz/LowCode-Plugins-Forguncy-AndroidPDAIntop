@@ -9,8 +9,8 @@ namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Camera.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(160)]
-    public class Camera_Take_Photo : Command
+    [OrderWeight(1160)]
+    public class Camera_Take_Photo : BaseCommand
     {
 
         /// <summary>
@@ -19,16 +19,7 @@ namespace AndroidPDACommand
         /// <returns>易读的字符串</returns>
         public override string ToString()
         {
-            return "拍摄照片"; // 命令列表中默认显示的名称
-        }
-
-        /// <summary>
-        /// 插件类型：设置为服务端命令插件
-        /// </summary>
-        /// <returns>插件类型枚举</returns>
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.ClientSide;
+            return "拍摄照片并将文件路径填充到单元格"; // 命令列表中默认显示的名称
         }
 
         [DisplayName("小尺寸")]

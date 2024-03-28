@@ -12,22 +12,21 @@ namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Phone.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(900)]
-    public class Open_Builtin_Activity : BaseCommand
+    [OrderWeight(901)]
+    public class App_Info2 : BaseCommand
     {
-        [DisplayName("目标页面")]
-        public BuiltinPage TargetPage { get; set; }
+        [ResultToProperty]
+        [DisplayName("读取版本号到变量")]
+        public string TargetVersion { get; set; } = "AppVersion";
+
+        [ResultToProperty]
+        [DisplayName("读取包名到变量")]
+        public string TargetName { get; set; } = "PackageName";
 
         public override string ToString()
         {
-            return "打开APP的内置页面";
+            return "读取APP信息";
         }
 
-    }
-
-    public enum BuiltinPage
-    {
-        配置,
-        快速设置
     }
 }

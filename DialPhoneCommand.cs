@@ -13,7 +13,7 @@ namespace AndroidPDACommand
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Phone.png")]
     [Category("活字格安卓容器（HAC）")]
     [OrderWeight(910)]
-    public class DialPhone : Command
+    public class DialPhone : BaseCommand
     {
         [FormulaProperty(false)]
         [SearchableProperty]
@@ -25,9 +25,5 @@ namespace AndroidPDACommand
             return "拨打电话";
         }
 
-        public override CommandScope GetCommandScope()
-        {
-            return CommandScope.All;
-        }
     }
 }

@@ -9,8 +9,8 @@ namespace AndroidPDACommand
 {
     [Icon("pack://application:,,,/AndroidPDACommand;component/Resources/Icon_Nfc.png")]
     [Category("活字格安卓容器（HAC）")]
-    [OrderWeight(1101)]
-    public class NfcReader : BaseCommand
+    [OrderWeight(101)]
+    public class NfcReader_Async : BaseAsyncCommand
     {
 
         /// <summary>
@@ -19,12 +19,12 @@ namespace AndroidPDACommand
         /// <returns>易读的字符串</returns>
         public override string ToString()
         {
-            return "读取NFC标签到单元格";
+            return "读取NFC标签";
         }
 
-        [FormulaProperty(true)]
-        [DisplayName("目标单元格（TAG ID，字符串）")]
-        public object TagCell { get; set; }
+        [Browsable(false)]
+        [ResultToProperty]
+        public string SubCommandParam { get; set; } = "NFC_Tag";
 
     }
 }
