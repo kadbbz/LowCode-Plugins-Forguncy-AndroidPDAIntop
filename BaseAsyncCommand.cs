@@ -11,6 +11,7 @@ namespace AndroidPDACommand
     /// <summary>
     /// 异步操作的基类
     /// </summary>
+    [Browsable(false)]
     public class BaseAsyncCommand: BaseCommand, ISubListCommand, IContainSubCommands
     {
         [Browsable(false)]

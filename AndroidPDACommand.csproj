@@ -83,6 +83,8 @@
     <Compile Include="BLE_Write_Async.cs" />
     <Compile Include="Broadcast_Mode_ContinuousScanStart_Async.cs" />
     <Compile Include="Broadcast_Mode_Scan_Async.cs" />
+    <Compile Include="Audio_Record_Async.cs" />
+    <Compile Include="Audio_Record.cs" />
     <Compile Include="Camera_Take_Photo_Async.cs" />
     <Compile Include="Camera_Take_Video_Async.cs" />
     <Compile Include="ESCPrinter_Print.cs" />
@@ -184,6 +186,9 @@
     <Resource Include="Resources\Icon_Camera.png" />
     <Resource Include="Resources\Icon_File.png" />
     <Resource Include="Resources\Icon_Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icon_Recorder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

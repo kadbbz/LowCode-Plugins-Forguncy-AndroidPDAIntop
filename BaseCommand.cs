@@ -2,6 +2,7 @@
 using GrapeCity.Forguncy.Plugin;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace AndroidPDACommand
     /// <summary>
     /// 所有命令的基类，处理GetForceGenerateCells
     /// </summary>
-    public class BaseCommand: Command,IForceGenerateCell
+    public abstract class BaseCommand: Command,IForceGenerateCell
     {
         public override CommandScope GetCommandScope()
         {

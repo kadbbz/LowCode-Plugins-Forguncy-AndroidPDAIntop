@@ -1,5 +1,9 @@
 ﻿
-var ERROR_NOT_RUN_IN_HAC = "当前APP不支持该命令，这通常是因为APP版本过低。您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/GrapeCity/huozige-hac-app ";
+var ERROR_NOT_RUN_IN_HAC = "当前APP不支持该命令，这通常是因为APP版本过低。您可以通过在葡萄城技术社区搜索“HAC”下载最新版APP，或访问以下地址获取并编译适配的Android APP。 项目地址： https://gitee.com/low-code-dev-lab/huozige-hac-app ";
+
+var HAC_CallFunctionOutOfHAC = function () {
+    alert(ERROR_NOT_RUN_IN_HAC);
+}
 
 var HAC_GenerateCellInfo = function (context, formula) {
     var cellLocation = context.getCellLocation(formula);
@@ -16,7 +20,7 @@ var HAC_GenerateCellInfo = function (context, formula) {
 
 var HAC_GenerateCallbackTicket = function (context, onSuccess) {
     if (!window.HAC) {
-        alert(ERROR_NOT_RUN_IN_HAC);
+        HAC_CallFunctionOutOfHAC();
     } else {
 
         var ticket = {
@@ -60,7 +64,7 @@ var HAC_DothanPrinterOp = function (callback) {
             callback(false, status);
         }
     } else {
-        alert(ERROR_NOT_RUN_IN_HAC);
+        HAC_CallFunctionOutOfHAC();
         callback(false, -1);
     }
 };
@@ -90,7 +94,7 @@ var Android_PDA_Broadcast_Mode_Scan_Command = (function (_super) {
             }
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -133,7 +137,7 @@ var Broadcast_Mode_Scan_Async_Command = (function (_super) {
             }
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -165,7 +169,7 @@ var Android_PDA_App_Info_Command = (function (_super) {
             console.log("从APP获取包名和版本信息");
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -198,7 +202,7 @@ var Android_PDA_App_Info2_Command = (function (_super) {
             console.log("从APP获取包名和版本信息");
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -224,7 +228,7 @@ var Android_PDA_CScan_Start_Command = (function (_super) {
             window.pda.continuous_scan(cellInfo, 0);
             console.log("启动持续扫描");
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -261,7 +265,7 @@ var Broadcast_Mode_ContinuousScanStart_Async_Command = (function (_super) {
         if (window.pda && window.pda.continuous_scanAsync) {
             window.pda.continuous_scanAsync(ticket, 0);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -285,7 +289,7 @@ var Android_PDA_CScan_Stop_Command = (function (_super) {
             window.pda.continuous_scan_stop();
             console.log("停止持续扫描");
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -312,7 +316,7 @@ var DialPhone_Command = (function (_super) {
             window.app.dial(phone);
             console.log("拨打电话：" + phone);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -337,7 +341,7 @@ var Set_ActionBar_Color_Command = (function (_super) {
             window.app.setActionBarColor(colorS);
             console.log("标题栏颜色设置完成：" + colorS);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -364,7 +368,7 @@ var Get_ActionBar_Color_Command = (function (_super) {
             console.log("从App获取状态栏颜色");
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -391,7 +395,7 @@ var Get_ActionBar_Color2_Command = (function (_super) {
             HAC_ReturnToParam(pName, color);
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -434,7 +438,7 @@ var Get_Location_Command = (function (_super) {
             console.log("获取地理位置");
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -488,7 +492,7 @@ var Get_Location_Async_Command = (function (_super) {
             window.geo.getLocationAsync(mode, ticket);
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -539,7 +543,7 @@ var Set_ActionBar_Style_Command = (function (_super) {
             window.app.restartApp();
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -566,7 +570,7 @@ var Set_Scanner_Options_Command = (function (_super) {
             console.log("配置扫描头Action：" + action + " ，Extra：" + extra);
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -604,7 +608,7 @@ var Set_Option_Menu_Command = (function (_super) {
             window.app.restartApp();
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -640,7 +644,7 @@ var Open_Builtin_Activity_Command = (function (_super) {
             }
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -668,7 +672,7 @@ var CloseApp_Command = (function (_super) {
         if (window.app && window.app.closeApp) {
             window.app.closeApp();
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -694,7 +698,7 @@ var PDFPreview_Command = (function (_super) {
         if (window.pdf) {
             window.pdf.preview(url, name, pwd);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -719,7 +723,7 @@ var Upsert_LocalKv_Command = (function (_super) {
         if (window.localKv) {
             window.localKv.upsert(key, value);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -745,7 +749,7 @@ var Retrieve_LocalKv_Command = (function (_super) {
         if (window.localKv) {
             window.localKv.retrieve(key, cellInfoV);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -771,7 +775,7 @@ var Retrieve_LocalKv_Command2 = (function (_super) {
             var value = window.localKv.retrieve2(key);
             HAC_ReturnToParam(pName, value);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -795,7 +799,7 @@ var Reset_LocalKv_Command = (function (_super) {
         if (window.localKv) {
             window.localKv.remove(key);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
 
     };
@@ -826,7 +830,7 @@ var OpenDothanPrinter_Command = (function (_super) {
                     var status = window.dothanPrinter.getStatus();
                     HAC_ReturnToParam(OutParamaterName, status);
                 } else {
-                    alert(ERROR_NOT_RUN_IN_HAC);
+                    HAC_CallFunctionOutOfHAC();
                     HAC_ReturnToParam(OutParamaterName, false);
                 }
 
@@ -1281,7 +1285,7 @@ var NfcReader_Command = (function (_super) {
         if (window.nfc) {
             window.nfc.readTagId(TagCell);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1316,7 +1320,7 @@ var NfcReader_Async_Command = (function (_super) {
         if (window.nfc && window.nfc.readTagIdAsync) {
             window.nfc.readTagIdAsync(ticket);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1340,7 +1344,7 @@ var JPush_Info_Command = (function (_super) {
 
             HAC_ReturnToParam(pName, value);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
             HAC_ReturnToParam(pName, "");
         }
     };
@@ -1365,7 +1369,7 @@ var Device_Info_Command = (function (_super) {
 
             HAC_ReturnToParam(pName, value);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
             HAC_ReturnToParam(pName, "");
         }
     };
@@ -1390,7 +1394,7 @@ var BLE_Scan_Command = (function (_super) {
         if (window.ble) {
             window.ble.scan(TargetCell, ErrorCell);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1424,7 +1428,7 @@ var BLE_Scan_Async_Command = (function (_super) {
         if (window.ble && window.ble.scanAsync) {
             window.ble.scanAsync(ticket);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1452,7 +1456,7 @@ var BLE_Read_Command = (function (_super) {
         if (window.ble) {
             window.ble.read(MAC, Service, Character, TargetCell, TargetRawCell, ErrorCell);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1497,7 +1501,7 @@ var BLE_Read_Async_Command = (function (_super) {
         if (window.ble && window.ble.readAsync) {
             window.ble.readAsync(MAC, Service, Character, ticket);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1543,7 +1547,7 @@ var BLE_Register_Command = (function (_super) {
             }
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1599,7 +1603,7 @@ var BLE_Register_Async_Command = (function (_super) {
             }
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1640,7 +1644,7 @@ var BLE_UR_Command = (function (_super) {
             }
 
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1672,7 +1676,7 @@ var BLE_Write_Command = (function (_super) {
         if (window.ble) {
             window.ble.write(MAC, Service, Character, Data, ErrorCell);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1711,7 +1715,7 @@ var BLE_Write_Async_Command = (function (_super) {
         if (window.ble && window.ble.writeAsync) {
             window.ble.writeAsync(MAC, Service, Character, Data, ticket);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1734,7 +1738,7 @@ var Camera_Take_Photo_Command = (function (_super) {
         if (window.camera) {
             window.camera.takePhoto(isSnapshot, TargetCell);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1770,7 +1774,7 @@ var Camera_Take_Photo_Async_Command = (function (_super) {
         if (window.camera && window.camera.takePhotoAsync) {
             window.camera.takePhotoAsync(isSnapshot, ticket);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1778,6 +1782,65 @@ var Camera_Take_Photo_Async_Command = (function (_super) {
 }(Forguncy.CommandBase));
 
 Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Camera_Take_Photo_Async, AndroidPDACommand", Camera_Take_Photo_Async_Command);
+
+var Audio_Record_Command = (function (_super) {
+    __extends(Audio_Record_Command, _super);
+    function Audio_Record_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Audio_Record_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var TargetCell = HAC_GenerateCellInfo(this, params.TargetCell);
+
+        if (window.audio && window.audio.record) {
+            window.audio.record(TargetCell);
+        } else {
+            HAC_CallFunctionOutOfHAC();
+        }
+    };
+
+    return Audio_Record_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Audio_Record, AndroidPDACommand", Audio_Record_Command);
+
+
+var Audio_Record_Async_Command = (function (_super) {
+    __extends(Audio_Record_Async_Command, _super);
+    function Audio_Record_Async_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Audio_Record_Async_Command.prototype.execute = function () {
+        var params = this.CommandParam;
+        var me = this;
+
+        var ticket = HAC_GenerateCallbackTicket(me, function (payload, payload2) {
+            me.CommandExecutor.excuteCommand(me.CommandParam.CommandList, {
+                runTimePageName: me.CommandExecutingInfo.runTimePageName,
+                commandID: new Date().valueOf().toString(),
+                initParams: {
+                    "File_Uri": payload,
+                    "IsSuccess": true,
+                    "Error": ""
+                },
+                locationString: "执行window.audio.recordAsync的回调"
+            });
+        });
+
+        if (window.audio && window.audio.recordAsync) {
+            window.audio.recordAsync(ticket);
+        } else {
+            HAC_CallFunctionOutOfHAC();
+        }
+    };
+
+    return Audio_Record_Async_Command;
+}(Forguncy.CommandBase));
+
+Forguncy.CommandFactory.registerCommand("AndroidPDACommand.Audio_Record_Async, AndroidPDACommand", Audio_Record_Async_Command);
+
 
 var Camera_Take_Video_Command = (function (_super) {
     __extends(Camera_Take_Video_Command, _super);
@@ -1793,7 +1856,7 @@ var Camera_Take_Video_Command = (function (_super) {
         if (window.camera) {
             window.camera.takeVideo(isSnapshot, TargetCell);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1828,7 +1891,7 @@ var Camera_Take_Video_Async_Command = (function (_super) {
         if (window.camera && window.camera.takeVideoAsync) {
             window.camera.takeVideoAsync(isSnapshot, ticket);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1860,7 +1923,7 @@ var File_Load_Base64_Command = (function (_super) {
 
             HAC_ReturnToParam(pName, objUrl);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1887,7 +1950,7 @@ var File_Add_Watermark_Command = (function (_super) {
         if (window.hac_file) {
             window.hac_file.drawWatermarkForImage(FileUri, WMText, WMTileMode, WMColor, TargetCell);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1926,7 +1989,7 @@ var File_Add_Watermark_Async_Command = (function (_super) {
         if (window.hac_file && window.hac_file.drawWatermarkForImageAsync) {
             window.hac_file.drawWatermarkForImageAsync(FileUri, WMText, WMTileMode, WMColor, ticket);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1948,7 +2011,7 @@ var Set_Offline_Mode_Command = (function (_super) {
         if (window.app) {
             window.app.toggleOfflineMode(IsOfflineMode);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -1970,7 +2033,7 @@ var Vibrate_Command = (function (_super) {
         if (window.app) {
             window.app.vibrate(duration);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -2005,7 +2068,7 @@ var Play_Ringtone_Command = (function (_super) {
                 }
             }
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -2034,7 +2097,7 @@ var ESCPrinter_Scan_Command = (function (_super) {
         if (window.escBtPrinter) {
             window.escBtPrinter.scan(TargetCell);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -2067,7 +2130,7 @@ var ESCPrinter_Scan_Async_Command = (function (_super) {
         if (window.escBtPrinter && window.escBtPrinter.scanAsync) {
             window.escBtPrinter.scanAsync(ticket);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
@@ -2093,7 +2156,7 @@ var ESCPrinter_Print_Command = (function (_super) {
         if (window.escBtPrinter) {
             window.escBtPrinter.print(macAddress, printerDpi, printerWidthMM, printerNbrCharactersPerLine, template);
         } else {
-            alert(ERROR_NOT_RUN_IN_HAC);
+            HAC_CallFunctionOutOfHAC();
         }
     };
 
